@@ -1,0 +1,8 @@
+npm install express sequelize mysql2 sequelize-typescript cors dotenv
+npm install --save-dev typescript ts-node @types/node @types/express  nodemon
+npm install supertest --save-dev
+npm install --save-dev jest ts-jest @types/jest
+npx ts-jest config:init
+npx jest
+
+git config --global user.name " " && git config --global user.email " " && git config --local user.name "al4nTomaz" && git config --local user.email "alantomazifprpgua@gmail.com"
