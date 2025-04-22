@@ -4,6 +4,7 @@ import { sequelize } from '../instances/mysql';
 export class Disciplina extends Model {
     public id!: number;
     public nome!: string;
+    public idProfessor!: number;
 }
 
 Disciplina.init(
@@ -16,6 +17,9 @@ Disciplina.init(
         nome: {
             type: DataTypes.STRING,
             allowNull: false,   
+        },
+        idProfessor: {
+            type: DataTypes.INTEGER,
         },
     },
     {
