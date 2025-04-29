@@ -21,7 +21,6 @@ Curso.init(
         descricao: {
             type: DataTypes.STRING,
             allowNull: false,
-            unique: true
         },
     },
     {

@@ -2,14 +2,14 @@ import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../instances/mysql';
 import { Curso } from './Curso';
 
-export class Truma extends Model {
+export class Turma extends Model {
     public id!: number;
     public nome!: string;
     public periodo!: string;
     public idCurso!: number;
 }
 
-Truma.init(
+Turma.init(
     {
         id: {
             type: DataTypes.INTEGER,
@@ -23,12 +23,6 @@ Truma.init(
         periodo: {
             type: DataTypes.STRING,
             allowNull: false,
-            unique: true
-        },
-        matricula: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            unique: true
         },
         idCurso: {
             type: DataTypes.STRING,

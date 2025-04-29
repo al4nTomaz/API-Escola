@@ -1,6 +1,6 @@
 import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../instances/mysql';
-import { Truma } from './Turma';
+import { Turma } from './Turma';
 
 export class Aluno extends Model {
     public id!: number;
@@ -27,11 +27,9 @@ Aluno.init(
             allowNull: false,
             unique: true
         },
-        //talvez nullo
         senha: {
             type: DataTypes.STRING,
             allowNull: false,
-            unique: true
         },
         matricula: {
             type: DataTypes.STRING,
@@ -42,7 +40,7 @@ Aluno.init(
             type: DataTypes.STRING,
             allowNull: false,
             references: {
-                model: Truma,
+                model: Turma,
                 key: "id",
             },
             onDelete: "CASCADE",
