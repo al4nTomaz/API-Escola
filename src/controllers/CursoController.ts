@@ -8,22 +8,24 @@ export const listarCursos = async (req: Request, res: Response)  : Promise<any> 
     res.status(200).json(cursos);
 }
 
-export const cadastrarCurso = async (req: Request, res: Response)  : Promise<any>  =>{
-    const { nome, descricao } = req.body;
+export const cadastrarCurso = async (req: Request, res: Response) : Promise<any>  =>{
+    try {
+        const { nome, descricao } = req.body;
 
-    if (nome) {
-        let cursoExiste = await Curso.findOne({ where: { nome } });
-        if (cursoExiste) {
-            return res.status(400).json({ error: "Nome do curso já existe." });
+        const cursoExistente = await Curso.findOne({ where: { nome } });
+
+        if (cursoExistente) {
+            return res.status(400).json({ error: 'Curso já existe' });
         }
 
-        let novoCurso = await Curso.create({ nome, descricao });
-        res.status(201).json({
-            message: "Curso cadastrado com sucesso",
-            novoCurso
-        });
+        const novoCurso = await Curso.create({ nome, descricao });
+
+        return res.status(201).json(novoCurso);
+
+    } catch (error) {
+        console.error('Erro ao cadastrar curso:', error);
+        return res.status(500).json({ error: 'Erro interno do servidor' });
     }
-    return res.status(400).json({ error: "Nome do curso é obrigatório." });
 }
 
 export const buscarCurso = async (req: Request, res: Response)  : Promise<any>  =>{

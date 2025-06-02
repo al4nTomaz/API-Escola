@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funcionalidades Intermediárias</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body class="bg-light">
+    <div class="container mt-4">
+        <h2 class="text-center mb-4">Funcionalidades Intermediárias</h2>
+        <a href="../" class="btn btn-secondary mb-3">Voltar à Home</a>
+
+        <section class="card shadow-sm mb-4 p-3">
+            <h4 class="card-title">Alunos Reprovados por Disciplina</h4>
+            <select id="selectDisciplinaReprovados" class="form-select mb-2"></select>
+            <button class="btn btn-info" onclick="listarAlunosReprovadosDisciplina()">Listar Alunos Reprovados</button>
+            <ul id="listaAlunosReprovadosDisciplina" class="list-group mt-2"></ul>
+        </section>
+
+    </div>
+
+    <script>
+        const API_URL = "http://localhost:3000";
+
+        async function popularDisciplinasSelects() {
+            const res = await axios.get(`${API_URL}/disciplinas`);
+            const select = document.getElementById("selectDisciplinaReprovados");
+            select.innerHTML = '<option value="">Selecione uma disciplina</option>';
+            res.data.forEach(disciplina => {
+                select.innerHTML += `<option value="${disciplina.id}">${disciplina.nome}</option>`;
+            });
+        }
+
+        async function listarAlunosReprovadosDisciplina() {
+            const disciplinaId = document.getElementById("selectDisciplinaReprovados").value;
+            if (!disciplinaId) return;
+            const lista = document.getElementById("listaAlunosReprovadosDisciplina");
+            lista.innerHTML = "";
+            const res = await axios.get(`${API_URL}/disciplinas/${disciplinaId}/reprovados`);
+            if (res.data && res.data.length > 0) {
+                res.data.forEach(aluno => {
+                    lista.innerHTML += `<li class="list-group-item">${aluno.nome} (${aluno.matricula}) - Motivo: ${aluno.motivoReprovacao}</li>`;
+                });
+            } else {
+                lista.innerHTML = "<li class='list-group-item'>Nenhum aluno reprovado nesta disciplina.</li>";
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', popularDisciplinasSelects);
+    </script>
+</body>
+</html>

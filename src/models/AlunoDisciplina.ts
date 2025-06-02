@@ -4,24 +4,26 @@ import { Disciplina } from './Disciplina';
 import { Aluno } from './Aluno';
 
 export class AlunoDisciplina extends Model {
-    public alunoId!: number;
-    public disciplinaId!: number;
+    public idAluno!: number;
+    public idDisciplina!: number;
 }
 
 AlunoDisciplina.init(
     {
-        alunoId: {
+        idAluno: {
             type: DataTypes.INTEGER,
             allowNull: false,
+            field: 'id_aluno',
             references: {
                 model: Aluno,
                 key: "id",
             },
             onDelete: "CASCADE",
         },
-        disciplinaId: {
+        idDisciplina: {
             type: DataTypes.INTEGER,
             allowNull: false,
+            field: 'id_disciplina',
             references: {
                 model: Disciplina,
                 key: "id",

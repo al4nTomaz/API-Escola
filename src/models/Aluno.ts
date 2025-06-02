@@ -37,7 +37,8 @@ Aluno.init(
             unique: true
         },
         idTurma: {
-            type: DataTypes.STRING,
+            type: DataTypes.INTEGER,
+            field: 'id_turma',
             references: {
                 model: Turma,
                 key: "id",

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presenças - Listar e Registrar</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body class="bg-light">
+    <div class="container mt-4">
+        <h2 class="text-center mb-4">Gestão de Presenças</h2>
+        <a href="../" class="btn btn-secondary mb-3">Voltar à Home</a>
+
+        <section class="card shadow-sm mb-4 p-3">
+            <h4 class="card-title">Listar Presenças</h4>
+            <button class="btn btn-info mb-3" onclick="listarPresencas()">Recarregar Lista de Presenças</button>
+            <ul id="listaPresencas" class="list-group"></ul>
+        </section>
+
+        <section class="card shadow-sm mb-4 p-3">
+            <h4 class="card-title">Registrar Nova Presença</h4>
+            <form id="formRegistrarPresenca" onsubmit="event.preventDefault(); cadastrarPresenca()">
+                <select id="selectAlunoPresenca" class="form-select mb-2" required></select>
+                <select id="selectDisciplinaPresenca" class="form-select mb-2" required></select>
+                <input type="date" id="dataPresenca" class="form-control mb-2" required>
+                <div class="form-check form-switch mb-2">
+                    <input class="form-check-input" type="checkbox" id="presentePresenca">
+                    <label class="form-check-label" for="presentePresenca">Presente</label>
+                </div>
+                <button class="btn btn-primary" type="submit">Registrar Presença</button>
+            </form>
+        </section>
+    </div>
+
+    <script>
+        const API_URL = "http://localhost:5000";
+
+        async function popularAlunosSelects() {
+            const res = await axios.get(`${API_URL}/alunos`);
+            const select = document.getElementById("selectAlunoPresenca");
+            select.innerHTML = '<option value="">Selecione um aluno</option>';
+            res.data.forEach(aluno => {
+                select.innerHTML += `<option value="${aluno.id}">${aluno.nome} (${aluno.matricula})</option>`;
+            });
+        }
+
+        async function popularDisciplinasSelects() {
+            const res = await axios.get(`${API_URL}/disciplinas`);
+            const select = document.getElementById("selectDisciplinaPresenca");
+            select.innerHTML = '<option value="">Selecione uma disciplina</option>';
+            res.data.forEach(disciplina => {
+                select.innerHTML += `<option value="${disciplina.id}">${disciplina.nome}</option>`;
+            });
+        }
+
+        async function listarPresencas() {
+            const res = await axios.get(`${API_URL}/presencas`);
+            const lista = document.getElementById("listaPresencas");
+            lista.innerHTML = "";
+            for (const presenca of res.data) {
+                let alunoNome = 'N/A';
+                let disciplinaNome = 'N/A';
+                
+                if (presenca.alunoId) {
+                    const alunoRes = await axios.get(`${API_URL}/alunos/${presenca.alunoId}`);
+                    alunoNome = alunoRes.data ? alunoRes.data.nome : 'N/A';
+                }
+                if (presenca.disciplinaId) {
+                    const disciplinaRes = await axios.get(`${API_URL}/disciplinas/${presenca.disciplinaId}`);
+                    disciplinaNome = disciplinaRes.data ? disciplinaRes.data.nome : 'N/A';
+                }
+
+                const li = document.createElement('li');
+                li.className = 'list-group-item d-flex justify-content-between align-items-center';
+                li.innerHTML = `
+                    <span>ID: ${presenca.id} - Aluno: ${alunoNome} - Disciplina: ${disciplinaNome} - Data: ${new Date(presenca.data).toLocaleDateString()} - Presente: ${presenca.presente ? 'Sim' : 'Não'}</span>
+                    <a href="presencas_detalhes.html?id=${presenca.id}" class="btn btn-sm btn-info">Ver Detalhes</a>
+                `;
+                lista.appendChild(li);
+            }
+        }
+
+        async function cadastrarPresenca() {
+            const alunoId = document.getElementById("selectAlunoPresenca").value;
+            const disciplinaId = document.getElementById("selectDisciplinaPresenca").value;
+            const data = document.getElementById("dataPresenca").value;
+            const presente = document.getElementById("presentePresenca").checked ? 1 : 0;
+
+            if (!alunoId || !disciplinaId || !data) return;
+
+            await axios.post(`${API_URL}/presencas`, { alunoId, disciplinaId, data, presente });
+            document.getElementById("formRegistrarPresenca").reset();
+            listarPresencas();
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            await popularAlunosSelects();
+            await popularDisciplinasSelects();
+            await listarPresencas();
+        });
+    </script>
+</body>
+</html>

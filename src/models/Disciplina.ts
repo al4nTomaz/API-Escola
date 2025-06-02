@@ -1,5 +1,6 @@
 import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../instances/mysql';
+import { Professor } from './Professor';
 
 export class Disciplina extends Model {
     public id!: number;
@@ -20,6 +21,11 @@ Disciplina.init(
         },
         idProfessor: {
             type: DataTypes.INTEGER,
+            field: 'id_curso',
+            references: {
+                model: Professor,
+                key: "id",
+            },
         },
     },
     {

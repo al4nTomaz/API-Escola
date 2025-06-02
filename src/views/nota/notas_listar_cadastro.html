@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notas - Listar e Lançar</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body class="bg-light">
+    <div class="container mt-4">
+        <h2 class="text-center mb-4">Gestão de Notas</h2>
+        <a href="../" class="btn btn-secondary mb-3">Voltar à Home</a>
+
+        <section class="card shadow-sm mb-4 p-3">
+            <h4 class="card-title">Listar Notas</h4>
+            <button class="btn btn-info mb-3" onclick="listarNotas()">Recarregar Lista de Notas</button>
+            <ul id="listaNotas" class="list-group"></ul>
+        </section>
+
+        <section class="card shadow-sm mb-4 p-3">
+            <h4 class="card-title">Lançar Nova Nota</h4>
+            <form id="formLancarNota" onsubmit="event.preventDefault(); cadastrarNota()">
+                <select id="selectAlunoNota" class="form-select mb-2" required></select>
+                <select id="selectDisciplinaNota" class="form-select mb-2" required></select>
+                <input type="number" step="0.1" id="valorNota" class="form-control mb-2" placeholder="Valor da Nota (Ex: 7.5)" required>
+                <input type="date" id="dataAvaliacaoNota" class="form-control mb-2" placeholder="Data da Avaliação" required>
+                <button class="btn btn-primary" type="submit">Lançar Nota</button>
+            </form>
+        </section>
+    </div>
+
+    <script>
+        const API_URL = "http://localhost:5000";
+
+        async function popularAlunosSelects() {
+            const res = await axios.get(`${API_URL}/alunos`);
+            const select = document.getElementById("selectAlunoNota");
+            select.innerHTML = '<option value="">Selecione um aluno</option>';
+            res.data.forEach(aluno => {
+                select.innerHTML += `<option value="${aluno.id}">${aluno.nome} (${aluno.matricula})</option>`;
+            });
+        }
+
+        async function popularDisciplinasSelects() {
+            const res = await axios.get(`${API_URL}/disciplinas`);
+            const select = document.getElementById("selectDisciplinaNota");
+            select.innerHTML = '<option value="">Selecione uma disciplina</option>';
+            res.data.forEach(disciplina => {
+                select.innerHTML += `<option value="${disciplina.id}">${disciplina.nome}</option>`;
+            });
+        }
+
+        async function listarNotas() {
+            const res = await axios.get(`${API_URL}/notas`);
+            const lista = document.getElementById("listaNotas");
+            lista.innerHTML = "";
+            for (const nota of res.data) {
+                let alunoNome = 'N/A';
+                let disciplinaNome = 'N/A';
+                
+                if (nota.alunoId) {
+                    const alunoRes = await axios.get(`${API_URL}/alunos/${nota.alunoId}`);
+                    alunoNome = alunoRes.data ? alunoRes.data.nome : 'N/A';
+                }
+                if (nota.disciplinaId) {
+                    const disciplinaRes = await axios.get(`${API_URL}/disciplinas/${nota.disciplinaId}`);
+                    disciplinaNome = disciplinaRes.data ? disciplinaRes.data.nome : 'N/A';
+                }
+
+                const li = document.createElement('li');
+                li.className = 'list-group-item d-flex justify-content-between align-items-center';
+                li.innerHTML = `
+                    <span>ID: ${nota.id} - Aluno: ${alunoNome} - Disciplina: ${disciplinaNome} - Nota: ${nota.nota} - Data: ${new Date(nota.data_avaliacao).toLocaleDateString()}</span>
+                    <a href="notas_detalhes.html?id=${nota.id}" class="btn btn-sm btn-info">Ver Detalhes</a>
+                `;
+                lista.appendChild(li);
+            }
+        }
+
+        async function cadastrarNota() {
+            const alunoId = document.getElementById("selectAlunoNota").value;
+            const disciplinaId = document.getElementById("selectDisciplinaNota").value;
+            const nota = document.getElementById("valorNota").value;
+            const data_avaliacao = document.getElementById("dataAvaliacaoNota").value;
+
+            if (!alunoId || !disciplinaId || !nota || !data_avaliacao) return;
+
+            await axios.post(`${API_URL}/notas`, { alunoId, disciplinaId, nota: parseFloat(nota), data_avaliacao });
+            document.getElementById("formLancarNota").reset();
+            listarNotas();
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            await popularAlunosSelects();
+            await popularDisciplinasSelects();
+            await listarNotas();
+        });
+    </script>
+</body>
+</html>

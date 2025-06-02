@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes da Nota</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body class="bg-light">
+    <div class="container mt-4">
+        <h2 class="text-center mb-4">Detalhes da Nota</h2>
+        <a href="notas_listar_cadastro.html" class="btn btn-secondary mb-3">Voltar para Notas</a>
+
+        <section class="card shadow-sm mb-4 p-3">
+            <h4 class="card-title">Dados da Nota</h4>
+            <div id="dadosNota" class="mb-3">
+                <p><strong>ID:</strong> <span id="notaIdDisplay"></span></p>
+                <p><strong>Aluno:</strong> <span id="notaAlunoDisplay"></span></p>
+                <p><strong>Disciplina:</strong> <span id="notaDisciplinaDisplay"></span></p>
+                <p><strong>Valor:</strong> <span id="notaValorDisplay"></span></p>
+                <p><strong>Data da Avaliação:</strong> <span id="notaDataAvaliacaoDisplay"></span></p>
+            </div>
+
+            <h5 class="mt-3">Atualizar Nota</h5>
+            <form id="formAtualizarNota" onsubmit="event.preventDefault(); atualizarNota()">
+                <input type="hidden" id="notaIdAtualizar">
+                <select id="selectAlunoNotaAtualizar" class="form-select mb-2" required></select>
+                <select id="selectDisciplinaNotaAtualizar" class="form-select mb-2" required></select>
+                <input type="number" step="0.1" id="valorNotaAtualizar" class="form-control mb-2" placeholder="Valor da Nota (Ex: 7.5)" required>
+                <input type="date" id="dataAvaliacaoNotaAtualizar" class="form-control mb-2" placeholder="Data da Avaliação" required>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                    <button class="btn btn-secondary me-md-2" type="submit">Atualizar Dados</button>
+                    <button class="btn btn-danger" type="button" onclick="deletarNota()">Deletar Nota</button>
+                </div>
+            </form>
+        </section>
+    </div>
+
+    <script>
+        const API_URL = "http://localhost:5000";
+        let notaId = null;
+
+        async function popularAlunosSelectsAtualizar() {
+            const res = await axios.get(`${API_URL}/alunos`);
+            const select = document.getElementById("selectAlunoNotaAtualizar");
+            select.innerHTML = '<option value="">Selecione um aluno</option>';
+            res.data.forEach(aluno => {
+                select.innerHTML += `<option value="${aluno.id}">${aluno.nome} (${aluno.matricula})</option>`;
+            });
+        }
+
+        async function popularDisciplinasSelectsAtualizar() {
+            const res = await axios.get(`${API_URL}/disciplinas`);
+            const select = document.getElementById("selectDisciplinaNotaAtualizar");
+            select.innerHTML = '<option value="">Selecione uma disciplina</option>';
+            res.data.forEach(disciplina => {
+                select.innerHTML += `<option value="${disciplina.id}">${disciplina.nome}</option>`;
+            });
+        }
+
+        async function carregarNota() {
+            const params = new URLSearchParams(window.location.search);
+            notaId = params.get('id');
+
+            if (!notaId) {
+                window.location.href = 'notas_listar_cadastro.html';
+                return;
+            }
+
+            const res = await axios.get(`${API_URL}/notas/${notaId}`);
+            if (res.data) {
+                document.getElementById("notaIdDisplay").innerText = res.data.id;
+                
+                let alunoNome = 'N/A';
+                if (res.data.alunoId) {
+                    const alunoRes = await axios.get(`${API_URL}/alunos/${res.data.alunoId}`);
+                    alunoNome = alunoRes.data ? alunoRes.data.nome : 'N/A';
+                }
+                document.getElementById("notaAlunoDisplay").innerText = alunoNome;
+
+                let disciplinaNome = 'N/A';
+                if (res.data.disciplinaId) {
+                    const disciplinaRes = await axios.get(`${API_URL}/disciplinas/${res.data.disciplinaId}`);
+                    disciplinaNome = disciplinaRes.data ? disciplinaRes.data.nome : 'N/A';
+                }
+                document.getElementById("notaDisciplinaDisplay").innerText = disciplinaNome;
+
+                document.getElementById("notaValorDisplay").innerText = res.data.nota;
+                document.getElementById("notaDataAvaliacaoDisplay").innerText = new Date(res.data.data_avaliacao).toLocaleDateString();
+
+                document.getElementById("notaIdAtualizar").value = res.data.id;
+                document.getElementById("selectAlunoNotaAtualizar").value = res.data.alunoId;
+                document.getElementById("selectDisciplinaNotaAtualizar").value = res.data.disciplinaId;
+                document.getElementById("valorNotaAtualizar").value = res.data.nota;
+                document.getElementById("dataAvaliacaoNotaAtualizar").value = res.data.data_avaliacao.split('T')[0];
+            } else {
+                window.location.href = 'notas_listar_cadastro.html';
+            }
+        }
+
+        async function atualizarNota() {
+            const id = document.getElementById("notaIdAtualizar").value;
+            const alunoId = document.getElementById("selectAlunoNotaAtualizar").value;
+            const disciplinaId = document.getElementById("selectDisciplinaNotaAtualizar").value;
+            const nota = document.getElementById("valorNotaAtualizar").value;
+            const data_avaliacao = document.getElementById("dataAvaliacaoNotaAtualizar").value;
+
+            if (!id || !alunoId || !disciplinaId || !nota || !data_avaliacao) return;
+
+            await axios.put(`${API_URL}/notas/${id}`, { alunoId, disciplinaId, nota: parseFloat(nota), data_avaliacao });
+            await carregarNota();
+        }
+
+        async function deletarNota() {
+            if (!confirm("Tem certeza que deseja deletar esta nota?")) return;
+            await axios.delete(`${API_URL}/notas/${notaId}`);
+            window.location.href = 'notas_listar_cadastro.html';
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            await popularAlunosSelectsAtualizar();
+            await popularDisciplinasSelectsAtualizar();
+            await carregarNota();
+        });
+    </script>
+</body>
+</html>

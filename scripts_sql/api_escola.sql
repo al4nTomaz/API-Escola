@@ -27,7 +27,7 @@ CREATE TABLE alunos (
     email VARCHAR(255),
     senha VARCHAR(45),
     matricula VARCHAR(50),
-    id_curso INT,
+    id_turma INT,
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     deletedAt TIMESTAMP NULL,

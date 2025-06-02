@@ -21,6 +21,7 @@ Presenca.init(
         idAluno: {
             type: DataTypes.STRING,
             allowNull: false,
+            field: 'id_aluno',
             references: {
                 model: Aluno,
                 key: "id",
@@ -30,6 +31,7 @@ Presenca.init(
         idDisciplina: {
             type: DataTypes.STRING,
             allowNull: false,
+            field: 'id_disciplina',
             references: {
                 model: Disciplina,
                 key: "id",

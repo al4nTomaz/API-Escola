@@ -10,15 +10,15 @@ export const listarTurmas = async (req: Request, res: Response)  : Promise<any> 
 }
 
 export const cadastrarTurma = async (req: Request, res: Response)  : Promise<any>  =>{
-    const { nome, descricao: periodo, idCurso } = req.body;
+    const { nome, periodo, idCurso } = req.body;
 
-    if (nome) {
+    if (nome && !idCurso) {
         let turmaExiste = await Turma.findOne({ where: { nome } });
         if (turmaExiste) {
             return res.status(400).json({ error: "Nome da turma já existe." });
         }
 
-        let novaTurma = await Turma.create({ nome, descricao: periodo, idCurso });
+        let novaTurma = await Turma.create({ nome, periodo, idCurso });
         res.status(201).json({
             message: "Turma cadastrada com sucesso",
             novaTurma

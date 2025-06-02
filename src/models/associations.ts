@@ -7,101 +7,93 @@ import { Professor } from './Professor';
 import { Presenca } from './Presenca';
 import { Nota } from './Nota';
 
-// Relação N:N entre Aluno e Disciplina através de AlunoDisciplina
-// (Um aluno pode ter muitas disciplinas, e uma disciplina pode ter muitos alunos)
+// Relação N:N entre Aluno e Disciplina
 Aluno.belongsToMany(Disciplina, {
     through: AlunoDisciplina,
-    foreignKey: 'alunoId',
+    foreignKey: 'id_aluno',
     as: 'disciplinas'
 });
 
 Disciplina.belongsToMany(Aluno, {
     through: AlunoDisciplina,
-    foreignKey: 'disciplinaId',
+    foreignKey: 'id_disciplina',
     as: 'alunos'
 });
 
 // Relação 1:N entre Turma e Aluno
-// (Uma turma tem muitos alunos)
 Turma.hasMany(Aluno, {
-    foreignKey: 'id_turma', // No ERD, é 'id_turma' em 'alunos'
+    foreignKey: 'id_turma',
     as: 'alunosDaTurma'
 });
 
 Aluno.belongsTo(Turma, {
-    foreignKey: 'id_turma', // No ERD, é 'id_turma' em 'alunos'
+    foreignKey: 'id_turma',
     as: 'turma'
 });
 
 // Relação 1:N entre Curso e Turma
-// (Um curso tem muitas turmas)
 Curso.hasMany(Turma, {
-    foreignKey: 'id_curso', // No ERD, é 'id_curso' em 'turmas'
+    foreignKey: 'id_curso',
     as: 'turmas'
 });
 
 Turma.belongsTo(Curso, {
-    foreignKey: 'id_curso', // No ERD, é 'id_curso' em 'turmas'
+    foreignKey: 'id_curso',
     as: 'curso'
 });
 
 // Relação 1:N entre Professor e Disciplina
-// (Um professor leciona muitas disciplinas)
 Professor.hasMany(Disciplina, {
-    foreignKey: 'id_professor', // No ERD, é 'id_professor' em 'disciplinas'
+    foreignKey: 'id_professor',
     as: 'disciplinasLecionadas'
 });
 
 Disciplina.belongsTo(Professor, {
-    foreignKey: 'id_professor', // No ERD, é 'id_professor' em 'disciplinas'
+    foreignKey: 'id_professor',
     as: 'professor'
 });
 
 // Relação 1:N entre Aluno e Presenca
-// (Um aluno tem muitas presenças)
 Aluno.hasMany(Presenca, {
-    foreignKey: 'alunoId', // No ERD, é 'alunoId' em 'presencas'
+    foreignKey: 'id_aluno',
     as: 'presencas'
 });
 
 Presenca.belongsTo(Aluno, {
-    foreignKey: 'alunoId', // No ERD, é 'alunoId' em 'presencas'
+    foreignKey: 'id_aluno',
     as: 'aluno'
 });
 
 // Relação 1:N entre Disciplina e Presenca
-// (Uma disciplina tem muitas presenças registradas)
 Disciplina.hasMany(Presenca, {
-    foreignKey: 'disciplinaId', // No ERD, é 'disciplinaId' em 'presencas'
+    foreignKey: 'id_disciplina',
     as: 'presencasDaDisciplina'
 });
 
 Presenca.belongsTo(Disciplina, {
-    foreignKey: 'disciplinaId', // No ERD, é 'disciplinaId' em 'presencas'
+    foreignKey: 'id_disciplina',
     as: 'disciplina'
 });
 
-// Relações 1:N para Nota (Corrigidas para refletir o ERD diretamente)
-// (Um aluno pode ter muitas notas)
+// Relação 1:N entre Aluno e Nota
 Aluno.hasMany(Nota, {
-    foreignKey: 'alunoId', // No ERD, é 'alunoId' em 'notas'
+    foreignKey: 'id_aluno',
     as: 'notas'
 });
 
 Nota.belongsTo(Aluno, {
-    foreignKey: 'alunoId', // No ERD, é 'alunoId' em 'notas'
+    foreignKey: 'id_aluno',
     as: 'aluno'
 });
 
-// (Uma disciplina pode ter muitas notas)
+// Relação 1:N entre Disciplina e Nota
 Disciplina.hasMany(Nota, {
-    foreignKey: 'disciplinaId', // No ERD, é 'disciplinaId' em 'notas'
+    foreignKey: 'id_disciplina',
     as: 'notasDaDisciplina'
 });
 
 Nota.belongsTo(Disciplina, {
-    foreignKey: 'disciplinaId', // No ERD, é 'disciplinaId' em 'notas'
+    foreignKey: 'id_disciplina',
     as: 'disciplina'
 });
 
-console.log("Todas as relações entre os models foram configuradas!");

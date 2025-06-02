@@ -21,6 +21,7 @@ Nota.init(
         idAluno: {
             type: DataTypes.STRING,
             allowNull: false,
+            field: 'id_aluno',
             references: {
                 model: Aluno,
                 key: "id",
@@ -28,7 +29,8 @@ Nota.init(
             onDelete: "CASCADE",
         },
         idDisciplina: {
-            type: DataTypes.STRING,
+            type: DataTypes.INTEGER,
+            field: 'id_disciplina',
             allowNull: false,
             references: {
                 model: Disciplina,
