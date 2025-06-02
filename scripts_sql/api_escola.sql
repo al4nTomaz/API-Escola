@@ -1,6 +1,18 @@
+-- Drop das tabelas de junção e dependentes primeiro
+DROP TABLE IF EXISTS presencas;
+DROP TABLE IF EXISTS notas;
+DROP TABLE IF EXISTS aluno_disciplina;
+DROP TABLE IF EXISTS alunos_turmas;
+DROP TABLE IF EXISTS disciplinas;
+DROP TABLE IF EXISTS professores;
+DROP TABLE IF EXISTS turmas;
+DROP TABLE IF EXISTS alunos;
+DROP TABLE IF EXISTS cursos;
+
+
 -- Tabela: cursos
 CREATE TABLE cursos (
-    id INT PRIMARY KEY,
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(255),
     descricao TEXT,
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -10,7 +22,7 @@ CREATE TABLE cursos (
 
 -- Tabela: alunos
 CREATE TABLE alunos (
-    id INT PRIMARY KEY,
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(255),
     email VARCHAR(255),
     senha VARCHAR(45),
@@ -24,7 +36,7 @@ CREATE TABLE alunos (
 
 -- Tabela: turmas
 CREATE TABLE turmas (
-    id INT PRIMARY KEY,
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(50),
     periodo VARCHAR(50),
     id_curso INT,
@@ -46,20 +58,9 @@ CREATE TABLE alunos_turmas (
     PRIMARY KEY (id_aluno, id_turma)
 );
 
--- Tabela: disciplinas
-CREATE TABLE disciplinas (
-    id INT PRIMARY KEY,
-    nome VARCHAR(255),
-    id_professor INT,
-    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    deletedAt TIMESTAMP NULL,
-    FOREIGN KEY (id_professor) REFERENCES professores(id)
-);
-
 -- Tabela: professores
 CREATE TABLE professores (
-    id INT PRIMARY KEY,
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(255),
     email VARCHAR(255),
     matricula VARCHAR(50),
@@ -68,6 +69,18 @@ CREATE TABLE professores (
     updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     deletedAt TIMESTAMP NULL
 );
+
+-- Tabela: disciplinas
+CREATE TABLE disciplinas (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(255),
+    id_professor INT,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deletedAt TIMESTAMP NULL,
+    FOREIGN KEY (id_professor) REFERENCES professores(id)
+);
+
 
 -- Tabela de junção: aluno_disciplina
 CREATE TABLE aluno_disciplina (
@@ -83,7 +96,7 @@ CREATE TABLE aluno_disciplina (
 
 -- Tabela: notas
 CREATE TABLE notas (
-    id INT PRIMARY KEY,
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     alunoId INT,
     disciplinaId INT,
     nota DECIMAL(5,2),
@@ -97,7 +110,7 @@ CREATE TABLE notas (
 
 -- Tabela: presencas
 CREATE TABLE presencas (
-    id INT PRIMARY KEY,
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     alunoId INT,
     disciplinaId INT,
     data DATE,

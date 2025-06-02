@@ -4,12 +4,12 @@ import { Op } from 'sequelize';
 import { Disciplina } from '../models/Disciplina'; 
 import { Aluno } from '../models/Aluno';
 
-export const listarPresencas = async (req: Request, res: Response) => {
+export const listarPresencas = async (req: Request, res: Response)  : Promise<any>  =>{
     const presencas = await Presenca.findAll();
     res.status(200).json(presencas);
 }
 
-export const cadastrarPresenca = async (req: Request, res: Response) => {
+export const cadastrarPresenca = async (req: Request, res: Response)  : Promise<any>  =>{
     const { alunoId, disciplinaId, data, presente } = req.body;
 
     if (!alunoId || !disciplinaId || !data || presente === undefined) {
@@ -28,7 +28,7 @@ export const cadastrarPresenca = async (req: Request, res: Response) => {
     }
 }
 
-export const buscarPresenca = async (req: Request, res: Response) => {
+export const buscarPresenca = async (req: Request, res: Response)  : Promise<any>  =>{
     try {
         const { presencaId } = req.params;
 
@@ -44,7 +44,7 @@ export const buscarPresenca = async (req: Request, res: Response) => {
     }
 }
 
-export const atualizarPresenca = async (req: Request, res: Response) => {
+export const atualizarPresenca = async (req: Request, res: Response)  : Promise<any>  =>{
     try {
         const { presencaId } = req.params;
         const dadosAtualizados = req.body;
@@ -63,7 +63,7 @@ export const atualizarPresenca = async (req: Request, res: Response) => {
     }
 }
 
-export const deletarPresenca = async (req: Request, res: Response) => {
+export const deletarPresenca = async (req: Request, res: Response)  : Promise<any>  =>{
     try {
         const { presencaId } = req.params;
 
@@ -81,7 +81,7 @@ export const deletarPresenca = async (req: Request, res: Response) => {
     }
 }
 
-export const listarPresencasDeletadas = async (req: Request, res: Response) => {
+export const listarPresencasDeletadas = async (req: Request, res: Response)  : Promise<any>  =>{
     const presencas = await Presenca.findAll({
         where: {
             deletedAt: {
@@ -94,7 +94,7 @@ export const listarPresencasDeletadas = async (req: Request, res: Response) => {
     res.status(200).json(presencas);
 }
 
-export const recuperarPresenca = async (req: Request, res: Response) => {
+export const recuperarPresenca = async (req: Request, res: Response)  : Promise<any>  =>{
     try {
         const { presencaId } = req.params;
 

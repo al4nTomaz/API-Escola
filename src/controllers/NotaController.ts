@@ -4,12 +4,12 @@ import { Op } from 'sequelize';
 import { Disciplina } from '../models/Disciplina'; 
 import { Aluno } from '../models/Aluno';
 
-export const listarNotas = async (req: Request, res: Response) => {
+export const listarNotas = async (req: Request, res: Response)  : Promise<any>  =>{
     const notas = await Nota.findAll();
     res.status(200).json(notas);
 }
 
-export const cadastrarNota = async (req: Request, res: Response) => {
+export const cadastrarNota = async (req: Request, res: Response)  : Promise<any>  =>{
     const { alunoId, disciplinaId, nota, data_avaliacao } = req.body;
 
     if (!alunoId || !disciplinaId || nota === undefined || !data_avaliacao) {
@@ -28,7 +28,7 @@ export const cadastrarNota = async (req: Request, res: Response) => {
     }
 }
 
-export const buscarNota = async (req: Request, res: Response) => {
+export const buscarNota = async (req: Request, res: Response)  : Promise<any>  =>{
     try {
         const { notaId } = req.params;
 
@@ -44,7 +44,7 @@ export const buscarNota = async (req: Request, res: Response) => {
     }
 }
 
-export const atualizarNota = async (req: Request, res: Response) => {
+export const atualizarNota = async (req: Request, res: Response)  : Promise<any>  =>{
     try {
         const { notaId } = req.params;
         const dadosAtualizados = req.body;
@@ -63,7 +63,7 @@ export const atualizarNota = async (req: Request, res: Response) => {
     }
 }
 
-export const deletarNota = async (req: Request, res: Response) => {
+export const deletarNota = async (req: Request, res: Response)  : Promise<any>  =>{
     try {
         const { notaId } = req.params;
 
@@ -86,7 +86,7 @@ export const deletarNota = async (req: Request, res: Response) => {
     }
 }
 
-export const listarNotasDeletadas = async (req: Request, res: Response) => {
+export const listarNotasDeletadas = async (req: Request, res: Response)  : Promise<any>  =>{
     const notas = await Nota.findAll({
         where: {
             deletedAt: {
@@ -99,7 +99,7 @@ export const listarNotasDeletadas = async (req: Request, res: Response) => {
     res.status(200).json(notas);
 }
 
-export const recuperarNota = async (req: Request, res: Response) => {
+export const recuperarNota = async (req: Request, res: Response)  : Promise<any>  =>{
     try {
         const { notaId } = req.params;
 

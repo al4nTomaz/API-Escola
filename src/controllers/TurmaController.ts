@@ -4,12 +4,12 @@ import { Op } from 'sequelize';
 import { Disciplina } from '../models/Disciplina'; 
 import { Aluno } from '../models/Aluno';
 
-export const listarTurmas = async (req: Request, res: Response) => {
+export const listarTurmas = async (req: Request, res: Response)  : Promise<any>  =>{
     const turmas = await Turma.findAll();
     res.status(200).json(turmas);
 }
 
-export const cadastrarTurma = async (req: Request, res: Response) => {
+export const cadastrarTurma = async (req: Request, res: Response)  : Promise<any>  =>{
     const { nome, descricao: periodo, idCurso } = req.body;
 
     if (nome) {
@@ -27,7 +27,7 @@ export const cadastrarTurma = async (req: Request, res: Response) => {
     return res.status(400).json({ error: "Nome da turma é obrigatório." });
 }
 
-export const buscarTurma = async (req: Request, res: Response) => {
+export const buscarTurma = async (req: Request, res: Response)  : Promise<any>  =>{
     try {
         const { turmaId } = req.params;
 
@@ -43,7 +43,7 @@ export const buscarTurma = async (req: Request, res: Response) => {
     }
 }
 
-export const atualizarTurma = async (req: Request, res: Response) => {
+export const atualizarTurma = async (req: Request, res: Response)  : Promise<any>  =>{
     try {
         const { turmaId } = req.params;
         const dadosAtualizados = req.body;
@@ -62,7 +62,7 @@ export const atualizarTurma = async (req: Request, res: Response) => {
     }
 }
 
-export const deletarTurma = async (req: Request, res: Response) => {
+export const deletarTurma = async (req: Request, res: Response)  : Promise<any>  =>{
     try {
         const { turmaId } = req.params;
 
@@ -85,7 +85,7 @@ export const deletarTurma = async (req: Request, res: Response) => {
     }
 }
 
-export const listarTurmasDeletadas = async (req: Request, res: Response) => {
+export const listarTurmasDeletadas = async (req: Request, res: Response)  : Promise<any>  =>{
     const turmas = await Turma.findAll({
         where: {
             deletedAt: {
@@ -98,7 +98,7 @@ export const listarTurmasDeletadas = async (req: Request, res: Response) => {
     res.status(200).json(turmas);
 }
 
-export const recuperarTurma = async (req: Request, res: Response) => {
+export const recuperarTurma = async (req: Request, res: Response)  : Promise<any>  =>{
     try {
         const { turmaId } = req.params;
 

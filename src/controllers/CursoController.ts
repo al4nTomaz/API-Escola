@@ -1,14 +1,14 @@
 import { Request, Response } from 'express';
-import { Curso } from '../models/Curso';
 import { Op } from 'sequelize';
+import { Curso } from '../models/Curso';
 import { Disciplina } from '../models/Disciplina';
 
-export const listarCursos = async (req: Request, res: Response) => {
+export const listarCursos = async (req: Request, res: Response)  : Promise<any>  =>{
     const cursos = await Curso.findAll();
     res.status(200).json(cursos);
 }
 
-export const cadastrarCurso = async (req: Request, res: Response) => {
+export const cadastrarCurso = async (req: Request, res: Response)  : Promise<any>  =>{
     const { nome, descricao } = req.body;
 
     if (nome) {
@@ -26,7 +26,7 @@ export const cadastrarCurso = async (req: Request, res: Response) => {
     return res.status(400).json({ error: "Nome do curso é obrigatório." });
 }
 
-export const buscarCurso = async (req: Request, res: Response) => {
+export const buscarCurso = async (req: Request, res: Response)  : Promise<any>  =>{
     try {
         const { cursoId } = req.params;
 
@@ -42,7 +42,7 @@ export const buscarCurso = async (req: Request, res: Response) => {
     }
 }
 
-export const atualizarCurso = async (req: Request, res: Response) => {
+export const atualizarCurso = async (req: Request, res: Response)  : Promise<any>  =>{
     try {
         const { cursoId } = req.params;
         const dadosAtualizados = req.body;
@@ -61,7 +61,7 @@ export const atualizarCurso = async (req: Request, res: Response) => {
     }
 }
 
-export const deletarCurso = async (req: Request, res: Response) => {
+export const deletarCurso = async (req: Request, res: Response)  : Promise<any>  =>{
     try {
         const { cursoId } = req.params;
 
@@ -84,7 +84,7 @@ export const deletarCurso = async (req: Request, res: Response) => {
     }
 }
 
-export const listarCursosDeletados = async (req: Request, res: Response) => {
+export const listarCursosDeletados = async (req: Request, res: Response)  : Promise<any>  =>{
     const cursos = await Curso.findAll({
         where: {
             deletedAt: {
@@ -97,7 +97,7 @@ export const listarCursosDeletados = async (req: Request, res: Response) => {
     res.status(200).json(cursos);
 }
 
-export const recuperarCurso = async (req: Request, res: Response) => {
+export const recuperarCurso = async (req: Request, res: Response)  : Promise<any>  =>{
     try {
         const { cursoId } = req.params;
 

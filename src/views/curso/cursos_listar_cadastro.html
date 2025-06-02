@@ -29,10 +29,10 @@
     </div>
 
     <script>
-        const API_URL = "http://localhost:5000";
+        const API_URL = "http://localhost:3000";
 
         async function listarCursos() {
-            const res = await axios.get(`${API_URL}/cursos`);
+            const res = await axios.get(`${API_URL}/listarCursos`);
             const lista = document.getElementById("listaCursos");
             lista.innerHTML = "";
             res.data.forEach(curso => {
@@ -52,7 +52,7 @@
 
             if (!nome || !descricao) return;
 
-            await axios.post(`${API_URL}/cursos`, { nome, descricao });
+            await axios.post(`${API_URL}/cadastrarCurso`, { nome, descricao });
             document.getElementById("formCadastrarCurso").reset();
             listarCursos();
         }
