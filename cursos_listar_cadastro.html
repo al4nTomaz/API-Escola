@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cursos - Listar e Cadastrar</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body class="bg-light">
+    <div class="container mt-4">
+        <h2 class="text-center mb-4">Gestão de Cursos</h2>
+        <a href="index.html" class="btn btn-secondary mb-3">Voltar à Home</a>
+
+        <section class="card shadow-sm mb-4 p-3">
+            <h4 class="card-title">Listar Cursos</h4>
+            <button class="btn btn-info mb-3" onclick="listarCursos()">Recarregar Lista de Cursos</button>
+            <ul id="listaCursos" class="list-group"></ul>
+        </section>
+
+        <section class="card shadow-sm mb-4 p-3">
+            <h4 class="card-title">Cadastrar Novo Curso</h4>
+            <form id="formCadastrarCurso" onsubmit="event.preventDefault(); cadastrarCurso()">
+                <input type="text" id="nomeCurso" class="form-control mb-2" placeholder="Nome do Curso" required>
+                <input type="text" id="descricaoCurso" class="form-control mb-2" placeholder="Descrição do Curso" required>
+                <button class="btn btn-primary" type="submit">Cadastrar Curso</button>
+            </form>
+        </section>
+    </div>
+
+    <script>
+        const API_URL = "http://localhost:5000";
+
+        async function listarCursos() {
+            const res = await axios.get(`${API_URL}/cursos`);
+            const lista = document.getElementById("listaCursos");
+            lista.innerHTML = "";
+            res.data.forEach(curso => {
+                const li = document.createElement('li');
+                li.className = 'list-group-item d-flex justify-content-between align-items-center';
+                li.innerHTML = `
+                    <span>ID: ${curso.id} - ${curso.nome}</span>
+                    <a href="cursos_detalhes.html?id=${curso.id}" class="btn btn-sm btn-info">Ver Detalhes</a>
+                `;
+                lista.appendChild(li);
+            });
+        }
+
+        async function cadastrarCurso() {
+            const nome = document.getElementById("nomeCurso").value;
+            const descricao = document.getElementById("descricaoCurso").value;
+
+            if (!nome || !descricao) return;
+
+            await axios.post(`${API_URL}/cursos`, { nome, descricao });
+            document.getElementById("formCadastrarCurso").reset();
+            listarCursos();
+        }
+
+        document.addEventListener('DOMContentLoaded', listarCursos);
+    </script>
+</body>
+</html>

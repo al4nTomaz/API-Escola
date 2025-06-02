@@ -2,6 +2,9 @@ import { Request, Response } from 'express';
 import { Aluno } from '../models/Aluno';
 import { Op } from 'sequelize';
 import { AlunoDisciplina } from '../models/AlunoDisciplina';
+import jwt from 'jsonwebtoken';
+
+const JWT_SECRET = process.env.JWT_SECRET || 'senha-super-secreta'
 
 export const listarAlunos = async (req: Request, res: Response) => {
   const alunos = await Aluno.findAll();
@@ -9,10 +12,10 @@ export const listarAlunos = async (req: Request, res: Response) => {
 };
 
 export const cadastrarAluno = async (req: Request, res: Response) => {
-  const { nome, email, matricula } = req.body;
+  const { nome, email, matricula, senha, idTurma } = req.body;
 
   try {
-    const novoAluno = await Aluno.create({ nome, email, matricula });
+    const novoAluno = await Aluno.create({ nome, email, matricula, senha, idTurma });
     res.status(201).json({
       message: 'Aluno cadastrado com sucesso',
       novoAluno,
@@ -137,5 +140,49 @@ export const pegarAluno = async (alunoId: string) => {
   } catch (error) {
     console.error('Erro ao buscar aluno:', error);
     return { message: 'Erro ao buscar aluno', error };
+  }
+};
+
+export const loginAluno = async (req: Request, res: Response): Promise<any> => {
+  const { email, matricula } = req.body;
+
+  console.log('📬 Requisição de login recebida');
+  console.log('📦 Dados recebidos:', { email, matricula });
+
+  if (!email || !matricula) {
+    console.warn('⚠️ Email ou matrícula não informados');
+    return res.status(400).json({ error: 'Informe e-mail e matrícula' });
+  }
+
+  try {
+    console.log('🔎 Buscando aluno no banco de dados...');
+    const aluno = await Aluno.findOne({ where: { email, matricula } });
+
+    if (!aluno) {
+      console.warn('🚫 Aluno não encontrado ou dados inválidos');
+      return res.status(401).json({ error: 'Aluno não encontrado ou dados inválidos' });
+    }
+
+    console.log('✅ Aluno encontrado:', aluno.dataValues);
+
+    
+    const payload = {
+      id: aluno.id,
+      nome: aluno.nome,
+      email: aluno.email,
+      matricula: aluno.matricula,
+    };
+
+    console.log('⚙️ Gerando token com payload:', payload);
+    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '2h' });
+
+    console.log('🔑 Token gerado com sucesso');
+    return res.json({
+      token,
+      mensagem: 'Aluno logado com sucesso'
+    });
+  } catch (error) {
+    console.error('🔥 Erro ao realizar login:', error);
+    return res.status(500).json({ error: 'Erro ao realizar login' });
   }
 };

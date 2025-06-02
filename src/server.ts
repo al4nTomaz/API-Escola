@@ -19,7 +19,7 @@ server.use(express.static(path.join(__dirname, '../public')));
 server.use(express.json()); // Usando JSON
 
 // Definir as rotas da API
-server.use(apiRoutes);
+server.use('/api', apiRoutes);
 
 // Endpoint para caso o usuário acesse um caminho inexistente
 server.use((req: Request, res: Response) => {
