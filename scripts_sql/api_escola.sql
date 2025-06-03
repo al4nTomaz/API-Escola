@@ -19,6 +19,17 @@ CREATE TABLE cursos (
     updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     deletedAt TIMESTAMP NULL
 );
+-- Tabela: turmas
+CREATE TABLE turmas (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(50),
+    periodo VARCHAR(50),
+    id_curso INT,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deletedAt TIMESTAMP NULL,
+    FOREIGN KEY (id_curso) REFERENCES cursos(id)
+);
 
 -- Tabela: alunos
 CREATE TABLE alunos (
@@ -34,17 +45,6 @@ CREATE TABLE alunos (
     FOREIGN KEY (id_curso) REFERENCES cursos(id)
 );
 
--- Tabela: turmas
-CREATE TABLE turmas (
-    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(50),
-    periodo VARCHAR(50),
-    id_curso INT,
-    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    deletedAt TIMESTAMP NULL,
-    FOREIGN KEY (id_curso) REFERENCES cursos(id)
-);
 
 -- Tabela de junção: alunos_turmas
 CREATE TABLE alunos_turmas (

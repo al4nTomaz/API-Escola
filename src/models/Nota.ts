@@ -5,8 +5,8 @@ import { Disciplina } from './Disciplina';
 
 export class Nota extends Model {
     public id!: number;
-    public idAluno!: number;
-    public idDisciplina!: number;
+    public id_aluno!: number;
+    public id_disciplina!: number;
     public nota!: number;
     public dataAvaliacao!: Date;
 }
@@ -18,7 +18,7 @@ Nota.init(
             primaryKey: true,
             autoIncrement: true,
         },
-        idAluno: {
+        id_aluno: {
             type: DataTypes.STRING,
             allowNull: false,
             field: 'id_aluno',
@@ -28,7 +28,7 @@ Nota.init(
             },
             onDelete: "CASCADE",
         },
-        idDisciplina: {
+        id_disciplina: {
             type: DataTypes.INTEGER,
             field: 'id_disciplina',
             allowNull: false,

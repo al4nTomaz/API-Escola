@@ -59,10 +59,10 @@
 
     <script>
         const API_URL = "http://localhost:3000";
-        let alunoId = null;
+        let id_aluno = null;
 
         async function popularTurmasSelectsAtualizar() {
-            const res = await axios.get(`${API_URL}/turmas`);
+            const res = await axios.get(`${API_URL}/listarTurmas`);
             const select = document.getElementById("selectTurmaAlunoAtualizar");
             select.innerHTML = '<option value="">Selecione uma turma</option>';
             res.data.forEach(turma => {
@@ -72,14 +72,14 @@
 
         async function carregarAluno() {
             const params = new URLSearchParams(window.location.search);
-            alunoId = params.get('id');
+            id_aluno = params.get('id');
 
-            if (!alunoId) {
+            if (!id_aluno) {
                 window.location.href = 'alunos_listar_cadastro.html'; // Redireciona se não houver ID
                 return;
             }
 
-            const res = await axios.get(`${API_URL}/alunos/${alunoId}`);
+            const res = await axios.get(`${API_URL}/buscarAluno/${id_aluno}`);
             if (res.data) {
                 document.getElementById("alunoIdDisplay").innerText = res.data.id;
                 document.getElementById("alunoNomeDisplay").innerText = res.data.nome;
@@ -88,7 +88,7 @@
                 
                 // Fetch turma name (assuming your API has a /turmas/:id endpoint)
                 if (res.data.id_turma) {
-                    const turmaRes = await axios.get(`${API_URL}/turmas/${res.data.id_turma}`);
+                    const turmaRes = await axios.get(`${API_URL}/listarTrumas/${res.data.id_turma}`);
                     document.getElementById("alunoTurmaDisplay").innerText = turmaRes.data ? turmaRes.data.nome : 'N/A';
                 } else {
                     document.getElementById("alunoTurmaDisplay").innerText = 'N/A';
@@ -116,20 +116,20 @@
             const data = { nome, email, matricula, id_turma };
             if (senha) data.senha = senha;
 
-            await axios.put(`${API_URL}/alunos/${id}`, data);
+            await axios.put(`${API_URL}/atualizarAluno/${id}`, data);
             await carregarAluno(); // Recarrega os dados para mostrar a atualização
         }
 
         async function deletarAluno() {
             if (!confirm("Tem certeza que deseja deletar este aluno?")) return;
-            await axios.delete(`${API_URL}/alunos/${alunoId}`);
+            await axios.delete(`${API_URL}/deletarAluno/${id_aluno}`);
             window.location.href = 'alunos_listar_cadastro.html'; // Redireciona após deletar
         }
 
         async function listarNotasMediasAluno() {
             const lista = document.getElementById("listaNotasMediasAluno");
             lista.innerHTML = "";
-            const res = await axios.get(`${API_URL}/alunos/${alunoId}/notas`);
+            const res = await axios.get(`${API_URL}/alunos/${id_aluno}/notas`);
             if (res.data && res.data.length > 0) {
                 res.data.forEach(item => {
                     lista.innerHTML += `<li class="list-group-item">
@@ -146,7 +146,7 @@
         async function listarPercentualPresencaAluno() {
             const lista = document.getElementById("listaPercentualPresencaAluno");
             lista.innerHTML = "";
-            const res = await axios.get(`${API_URL}/alunos/${alunoId}/presencas`);
+            const res = await axios.get(`${API_URL}/alunos/${id_aluno}/presencas`);
             if (res.data && Object.keys(res.data).length > 0) {
                 for (const disciplinaNome in res.data) {
                     lista.innerHTML += `<li class="list-group-item">
@@ -162,7 +162,7 @@
         async function listarSituacaoAluno() {
             const lista = document.getElementById("listaSituacaoAluno");
             lista.innerHTML = "";
-            const res = await axios.get(`${API_URL}/alunos/${alunoId}/situacao`);
+            const res = await axios.get(`${API_URL}/alunos/${id_aluno}/situacao`);
             if (res.data && Object.keys(res.data).length > 0) {
                 for (const disciplinaNome in res.data) {
                     const situacao = res.data[disciplinaNome];

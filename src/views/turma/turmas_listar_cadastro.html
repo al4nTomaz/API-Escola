@@ -47,8 +47,8 @@
             lista.innerHTML = "";
             for (const turma of res.data) {
                 let cursoNome = 'N/A';
-                if (turma.idCurso) {
-                    const cursoRes = await axios.get(`${API_URL}/buscarCurso/${turma.idCurso}`);
+                if (turma.id_curso) {
+                    const cursoRes = await axios.get(`${API_URL}/buscarCurso/${turma.id_curso}`);
                     cursoNome = cursoRes.data ? cursoRes.data.nome : 'N/A';
                 }
                 const li = document.createElement('li');

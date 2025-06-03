@@ -8,7 +8,7 @@ export class Aluno extends Model {
     public email!: string;
     public senha!: string;
     public matricula!: string;
-    public idTurma!: number;
+    public id_turma!: number;
 }
 
 Aluno.init(
@@ -36,7 +36,7 @@ Aluno.init(
             allowNull: false,
             unique: true
         },
-        idTurma: {
+        id_turma: {
             type: DataTypes.INTEGER,
             field: 'id_turma',
             references: {

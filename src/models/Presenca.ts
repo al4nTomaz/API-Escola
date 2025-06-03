@@ -5,8 +5,8 @@ import { Disciplina } from './Disciplina';
 
 export class Presenca extends Model {
     public id!: number;
-    public idAluno!: number;
-    public idDisciplina!: number;
+    public id_aluno!: number;
+    public id_disciplina!: number;
     public data!: Date;
     public presente!: number;
 }
@@ -18,7 +18,7 @@ Presenca.init(
             primaryKey: true,
             autoIncrement: true,
         },
-        idAluno: {
+        id_aluno: {
             type: DataTypes.STRING,
             allowNull: false,
             field: 'id_aluno',
@@ -28,7 +28,7 @@ Presenca.init(
             },
             onDelete: "CASCADE",
         },
-        idDisciplina: {
+        id_disciplina: {
             type: DataTypes.STRING,
             allowNull: false,
             field: 'id_disciplina',

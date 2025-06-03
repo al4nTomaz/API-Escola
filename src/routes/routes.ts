@@ -14,14 +14,14 @@ import {
 } from '../controllers/AlunoController';
 
 // Rotas para Alunos
-router.get('/listarTodosAlunos', listarAlunos);
+router.get('/listarAlunos', listarAlunos);
 router.post('/cadastrarAluno', cadastrarAluno);
 router.get('/buscarAluno/:alunoId', buscarAluno);
 router.put('/atualizarAluno/:alunoId', atualizarAluno);
 router.delete('/deletarAluno/:alunoId', deletarAluno);
 router.get('/listarAlunosDeletados', listarAlunosDeletados);
 router.put('/recuperarAluno/:alunoId', recuperarAluno);
-router.post('/login', loginAluno);
+// router.post('/login', loginAluno);
 
 import {
     listarDisciplinas,
@@ -32,7 +32,7 @@ import {
 } from '../controllers/DisciplinaController';
 
 // Rotas para Disciplinas
-router.get('/listarTodasDisciplinas', listarDisciplinas);
+router.get('/listarDisciplinas', listarDisciplinas);
 router.post('/cadastrarDisciplina', cadastrarDisciplina);
 router.put('/atualizarDisciplina/:disciplinaId', atualizarDisciplina);
 router.delete('/deletarDisciplina/:disciplinaId', deletarDisciplina);

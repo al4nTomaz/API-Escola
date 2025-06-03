@@ -4,13 +4,13 @@ import { Disciplina } from './Disciplina';
 import { Aluno } from './Aluno';
 
 export class AlunoDisciplina extends Model {
-    public idAluno!: number;
-    public idDisciplina!: number;
+    public id_aluno!: number;
+    public id_disciplina!: number;
 }
 
 AlunoDisciplina.init(
     {
-        idAluno: {
+        id_aluno: {
             type: DataTypes.INTEGER,
             allowNull: false,
             field: 'id_aluno',
@@ -20,7 +20,7 @@ AlunoDisciplina.init(
             },
             onDelete: "CASCADE",
         },
-        idDisciplina: {
+        id_disciplina: {
             type: DataTypes.INTEGER,
             allowNull: false,
             field: 'id_disciplina',

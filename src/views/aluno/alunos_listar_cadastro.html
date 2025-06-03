@@ -32,10 +32,10 @@
     </div>
 
     <script>
-        const API_URL = "http://localhost:5000";
+        const API_URL = "http://localhost:3000";
 
         async function popularTurmasSelects() {
-            const res = await axios.get(`${API_URL}/turmas`);
+            const res = await axios.get(`${API_URL}/listarTurmas`);
             const select = document.getElementById("selectTurmaAluno");
             select.innerHTML = '<option value="">Selecione uma turma</option>';
             res.data.forEach(turma => {
@@ -44,7 +44,7 @@
         }
 
         async function listarAlunos() {
-            const res = await axios.get(`${API_URL}/alunos`);
+            const res = await axios.get(`${API_URL}/listarAlunos`);
             const lista = document.getElementById("listaAlunos");
             lista.innerHTML = "";
             res.data.forEach(aluno => {
@@ -67,7 +67,7 @@
 
             if (!nome || !email || !matricula || !senha || !id_turma) return;
 
-            await axios.post(`${API_URL}/alunos`, { nome, email, matricula, senha, id_turma });
+            await axios.post(`${API_URL}/cadastrarAluno`, { nome, email, matricula, senha, id_turma });
             document.getElementById("formCadastrarAluno").reset();
             listarAlunos();
         }
