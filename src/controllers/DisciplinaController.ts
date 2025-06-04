@@ -9,12 +9,12 @@ export const listarDisciplinas = async (req: Request, res: Response) => {
 }
 
 export const cadastrarDisciplina = async (req: Request, res: Response) => {
-    const { nome, idProfessor } = req.body;
+    const { nome, id_professor } = req.body;
 
     if (nome) {
         let disciplinaExiste = await Disciplina.findOne({ where: { nome } });
         if (!disciplinaExiste) {
-            let novoDisciplina = await Disciplina.create({ nome, idProfessor });
+            let novoDisciplina = await Disciplina.create({ nome, id_professor });
             res.status(201).json({
                 message: "Disciplina cadastrado com sucesso",
                 novoDisciplina

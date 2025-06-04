@@ -34,9 +34,9 @@ export const cadastrarAluno = async (req: Request, res: Response): Promise<any> 
 
 export const buscarAluno = async (req: Request, res: Response): Promise<any> => {
     try {
-        const { id_aluno } = req.params;
+        const { alunoId } = req.params;
 
-        const aluno = await Aluno.findByPk(id_aluno);
+        const aluno = await Aluno.findByPk(alunoId);
         if (!aluno) {
             return res.status(404).json({ error: 'Aluno não encontrado.' });
         }

@@ -59,7 +59,7 @@
 
     <script>
         const API_URL = "http://localhost:3000";
-        let id_aluno = null;
+        let alunoId = null;
 
         async function popularTurmasSelectsAtualizar() {
             const res = await axios.get(`${API_URL}/listarTurmas`);
@@ -72,14 +72,14 @@
 
         async function carregarAluno() {
             const params = new URLSearchParams(window.location.search);
-            id_aluno = params.get('id');
+            alunoId = params.get('id');
 
-            if (!id_aluno) {
+            if (!alunoId) {
                 window.location.href = 'alunos_listar_cadastro.html'; // Redireciona se não houver ID
                 return;
             }
 
-            const res = await axios.get(`${API_URL}/buscarAluno/${id_aluno}`);
+            const res = await axios.get(`${API_URL}/buscarAluno/${alunoId}`);
             if (res.data) {
                 document.getElementById("alunoIdDisplay").innerText = res.data.id;
                 document.getElementById("alunoNomeDisplay").innerText = res.data.nome;
@@ -122,14 +122,14 @@
 
         async function deletarAluno() {
             if (!confirm("Tem certeza que deseja deletar este aluno?")) return;
-            await axios.delete(`${API_URL}/deletarAluno/${id_aluno}`);
+            await axios.delete(`${API_URL}/deletarAluno/${alunoId}`);
             window.location.href = 'alunos_listar_cadastro.html'; // Redireciona após deletar
         }
 
         async function listarNotasMediasAluno() {
             const lista = document.getElementById("listaNotasMediasAluno");
             lista.innerHTML = "";
-            const res = await axios.get(`${API_URL}/alunos/${id_aluno}/notas`);
+            const res = await axios.get(`${API_URL}/alunos/${alunoId}/notas`);
             if (res.data && res.data.length > 0) {
                 res.data.forEach(item => {
                     lista.innerHTML += `<li class="list-group-item">
@@ -146,7 +146,7 @@
         async function listarPercentualPresencaAluno() {
             const lista = document.getElementById("listaPercentualPresencaAluno");
             lista.innerHTML = "";
-            const res = await axios.get(`${API_URL}/alunos/${id_aluno}/presencas`);
+            const res = await axios.get(`${API_URL}/alunos/${alunoId}/presencas`);
             if (res.data && Object.keys(res.data).length > 0) {
                 for (const disciplinaNome in res.data) {
                     lista.innerHTML += `<li class="list-group-item">
@@ -162,7 +162,7 @@
         async function listarSituacaoAluno() {
             const lista = document.getElementById("listaSituacaoAluno");
             lista.innerHTML = "";
-            const res = await axios.get(`${API_URL}/alunos/${id_aluno}/situacao`);
+            const res = await axios.get(`${API_URL}/alunos/${alunoId}/situacao`);
             if (res.data && Object.keys(res.data).length > 0) {
                 for (const disciplinaNome in res.data) {
                     const situacao = res.data[disciplinaNome];

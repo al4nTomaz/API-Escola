@@ -25,14 +25,14 @@ Professor.init(
             allowNull: false,
             unique: true
         },
-        senha: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
         matricula: {
             type: DataTypes.STRING,
             allowNull: false,
             unique: true
+        },
+        senha: {
+            type: DataTypes.STRING,
+            allowNull: false,
         },
     },
     {

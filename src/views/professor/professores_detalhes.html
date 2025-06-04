@@ -37,7 +37,7 @@
     </div>
 
     <script>
-        const API_URL = "http://localhost:5000";
+        const API_URL = "http://localhost:3000";
         let professorId = null;
 
         async function carregarProfessor() {
@@ -49,7 +49,7 @@
                 return;
             }
 
-            const res = await axios.get(`${API_URL}/professores/${professorId}`);
+            const res = await axios.get(`${API_URL}/buscarProfessor/${professorId}`);
             if (res.data) {
                 document.getElementById("professorIdDisplay").innerText = res.data.id;
                 document.getElementById("professorNomeDisplay").innerText = res.data.nome;
@@ -77,13 +77,13 @@
 
             if (!id || !nome || !email || !matricula) return;
 
-            await axios.put(`${API_URL}/professores/${id}`, data);
+            await axios.put(`${API_URL}/atualizarProfessor/${id}`, data);
             await carregarProfessor();
         }
 
         async function deletarProfessor() {
             if (!confirm("Tem certeza que deseja deletar este professor?")) return;
-            await axios.delete(`${API_URL}/professores/${professorId}`);
+            await axios.delete(`${API_URL}/deletarProfessor/${professorId}`);
             window.location.href = 'professores_listar_cadastro.html';
         }
 

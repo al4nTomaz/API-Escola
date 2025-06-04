@@ -34,11 +34,11 @@
     </div>
 
     <script>
-        const API_URL = "http://localhost:5000";
+        const API_URL = "http://localhost:3000";
         let disciplinaId = null;
 
         async function popularProfessoresSelectsAtualizar() {
-            const res = await axios.get(`${API_URL}/professores`);
+            const res = await axios.get(`${API_URL}/listarProfessores`);
             const select = document.getElementById("selectProfessorDisciplinaAtualizar");
             select.innerHTML = '<option value="">Selecione um professor</option>';
             res.data.forEach(professor => {

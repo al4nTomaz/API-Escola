@@ -21,7 +21,7 @@ Disciplina.init(
         },
         id_professor: {
             type: DataTypes.INTEGER,
-            field: 'id_curso',
+            field: 'id_professor',
             references: {
                 model: Professor,
                 key: "id",
