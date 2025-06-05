@@ -33,7 +33,7 @@ AlunoDisciplina.init(
     },
     {
         sequelize,
-        tableName: "aluno_disciplinas",
+        tableName: "aluno_disciplina",
         timestamps: false,
 
     }

@@ -6,6 +6,7 @@ import { Curso } from './Curso';
 import { Professor } from './Professor';
 import { Presenca } from './Presenca';
 import { Nota } from './Nota';
+import { AlunoTurma } from './AlunoTurma';
 
 // Relação N:N entre Aluno e Disciplina
 Aluno.belongsToMany(Disciplina, {
@@ -20,16 +21,42 @@ Disciplina.belongsToMany(Aluno, {
     as: 'alunos'
 });
 
-// Relação 1:N entre Turma e Aluno
-Turma.hasMany(Aluno, {
-    foreignKey: 'id_turma',
-    as: 'alunosDaTurma'
+Curso.hasMany(Aluno, {
+  foreignKey: 'id_curso',
+  as: 'alunos'
 });
 
-Aluno.belongsTo(Turma, {
-    foreignKey: 'id_turma',
-    as: 'turma'
+// Um Aluno pertence a um Curso
+Aluno.belongsTo(Curso, {
+  foreignKey: 'id_curso',
+  as: 'curso'
 });
+
+Aluno.belongsToMany(Turma, {
+  through: AlunoTurma,
+  foreignKey: 'id_aluno',     // chave que representa o Aluno na tabela de junção
+  otherKey: 'id_turma',       // chave que representa a Turma
+  as: 'turmas'
+});
+
+Turma.belongsToMany(Aluno, {
+  through: AlunoTurma,
+  foreignKey: 'id_turma',     // chave que representa a Turma na tabela de junção
+  otherKey: 'id_aluno',       // chave que representa o Aluno
+  as: 'alunos'
+});
+
+
+// Relação 1:N entre Turma e Aluno
+// Turma.hasMany(Aluno, {
+//     foreignKey: 'id_turma',
+//     as: 'alunosDaTurma'
+// });
+
+// Aluno.belongsTo(Turma, {
+//     foreignKey: 'id_turma',
+//     as: 'turma'
+// });
 
 // Relação 1:N entre Curso e Turma
 Curso.hasMany(Turma, {

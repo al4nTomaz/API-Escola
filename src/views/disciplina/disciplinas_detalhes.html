@@ -55,14 +55,14 @@
                 return;
             }
 
-            const res = await axios.get(`${API_URL}/disciplinas/${disciplinaId}`);
+            const res = await axios.get(`${API_URL}/BuscarDisciplina/${disciplinaId}`);
             if (res.data) {
                 document.getElementById("disciplinaIdDisplay").innerText = res.data.id;
                 document.getElementById("disciplinaNomeDisplay").innerText = res.data.nome;
                 
                 let professorNome = 'N/A';
                 if (res.data.id_professor) {
-                    const profRes = await axios.get(`${API_URL}/professores/${res.data.id_professor}`);
+                    const profRes = await axios.get(`${API_URL}/buscarProfessor/${res.data.id_professor}`);
                     professorNome = profRes.data ? profRes.data.nome : 'N/A';
                 }
                 document.getElementById("disciplinaProfessorDisplay").innerText = professorNome;
@@ -82,13 +82,13 @@
 
             if (!id || !nome || !id_professor) return;
 
-            await axios.put(`${API_URL}/disciplinas/${id}`, { nome, id_professor });
+            await axios.put(`${API_URL}/atualizarDisciplina/${id}`, { nome, id_professor });
             await carregarDisciplina();
         }
 
         async function deletarDisciplina() {
             if (!confirm("Tem certeza que deseja deletar esta disciplina?")) return;
-            await axios.delete(`${API_URL}/disciplinas/${disciplinaId}`);
+            await axios.delete(`${API_URL}/deletarDisciplina/${disciplinaId}`);
             window.location.href = 'disciplinas_listar_cadastro.html';
         }
 

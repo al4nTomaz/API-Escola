@@ -9,21 +9,21 @@ export const listarAlunos = async (req: Request, res: Response): Promise<any> =>
 
 export const cadastrarAluno = async (req: Request, res: Response): Promise<any> => {
     try {
-        const { nome, email, senha, matricula, id_turma} = req.body;
+        const { nome, email, senha, matricula, id_curso} = req.body;
 
-        let alunoExistente = await Aluno.findOne({ where: { email } });
+        // let alunoExistente = await Aluno.findOne({ where: { email } });
 
-        if (alunoExistente) {
-            return res.status(400).json({ error: 'Aluno já cadastrado' });
-        }
+        // if (alunoExistente) {
+        //     return res.status(400).json({ error: 'Aluno já cadastrado' });
+        // }
 
-        alunoExistente = await Aluno.findOne({ where: { matricula } });
+        // alunoExistente = await Aluno.findOne({ where: { matricula } });
 
-        if (alunoExistente) {
-            return res.status(400).json({ error: 'Aluno já cadastrado' });
-        }
+        // if (alunoExistente) {
+        //     return res.status(400).json({ error: 'Aluno já cadastrado' });
+        // }
 
-        const novoAluno = await Aluno.create({ nome, email, senha, matricula, id_turma });
+        const novoAluno = await Aluno.create({ nome, email, senha, matricula, id_curso });
 
         return res.status(201).json(novoAluno);
     } catch (error) {

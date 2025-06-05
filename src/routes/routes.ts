@@ -48,6 +48,15 @@ import {
 router.get('/listarDisciplinaDoAluno/:alunoId', listarDisciplinaDoAluno);
 router.post('/vincularDisciplinasDoAluno', vincularDisciplinasDoAluno);
 
+import {
+    listarTurmasDoAluno,
+    vincularTurmaDoAluno
+} from '../controllers/AlunoTurmaController';
+
+// Rotas para Aluno_Turma (Associação)
+router.get('/listarTurmasDoAluno/:id_aluno', listarTurmasDoAluno);
+router.put('/vincularTurmasDoAluno/:id_aluno/:id_turma', vincularTurmaDoAluno);
+
 
 // --- Rotas para as tabelas faltantes (agora com imports desestruturados) ---
 

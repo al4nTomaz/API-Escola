@@ -25,7 +25,8 @@
                 <input type="email" id="emailAluno" class="form-control mb-2" placeholder="E-mail" required>
                 <input type="text" id="matriculaAluno" class="form-control mb-2" placeholder="Matrícula" required>
                 <input type="password" id="senhaAluno" class="form-control mb-2" placeholder="Senha" required>
-                <select id="selectTurmaAluno" class="form-select mb-2" required></select>
+                <!-- <select id="selectTurmaAluno" class="form-select mb-2"></select> -->
+                <select id="selectCursoAluno" class="form-select mb-2" required></select>
                 <button class="btn btn-primary" type="submit">Cadastrar Aluno</button>
             </form>
         </section>
@@ -34,28 +35,45 @@
     <script>
         const API_URL = "http://localhost:3000";
 
-        async function popularTurmasSelects() {
-            const res = await axios.get(`${API_URL}/listarTurmas`);
-            const select = document.getElementById("selectTurmaAluno");
-            select.innerHTML = '<option value="">Selecione uma turma</option>';
-            res.data.forEach(turma => {
-                select.innerHTML += `<option value="${turma.id}">${turma.nome} (${turma.periodo})</option>`;
+        // async function popularTurmasSelects() {
+        //     try {
+        //         const res = await axios.get(`${API_URL}/listarTurmas`);
+        //         const select = document.getElementById("selectTurmaAluno");
+        //         select.innerHTML = '<option value="">Selecione uma turma</option>';
+        //         res.data.forEach(turma => {
+        //             select.innerHTML += `<option value="${turma.id}">${turma.nome} (${turma.periodo})</option>`;
+        //         });
+        //     } catch (error) {
+        //         console.error("Erro ao listar turmas:", error);
+        //     }
+        // }
+
+        async function popularCursosSelects() {
+            const res = await axios.get(`${API_URL}/listarCursos`);
+            const select = document.getElementById("selectCursoAluno");
+            select.innerHTML = '<option value="">Selecione um curso</option>';
+            res.data.forEach(curso => {
+                select.innerHTML += `<option value="${curso.id}">${curso.nome}</option>`;
             });
         }
 
         async function listarAlunos() {
-            const res = await axios.get(`${API_URL}/listarAlunos`);
-            const lista = document.getElementById("listaAlunos");
-            lista.innerHTML = "";
-            res.data.forEach(aluno => {
-                const li = document.createElement('li');
-                li.className = 'list-group-item d-flex justify-content-between align-items-center';
-                li.innerHTML = `
-                    <span>ID: ${aluno.id} - ${aluno.nome} (${aluno.matricula})</span>
-                    <a href="alunos_detalhes.html?id=${aluno.id}" class="btn btn-sm btn-info">Ver Detalhes</a>
-                `;
-                lista.appendChild(li);
-            });
+            try {
+                const res = await axios.get(`${API_URL}/listarAlunos`);
+                const lista = document.getElementById("listaAlunos");
+                lista.innerHTML = "";
+                res.data.forEach(aluno => {
+                    const li = document.createElement('li');
+                    li.className = 'list-group-item d-flex justify-content-between align-items-center';
+                    li.innerHTML = `
+                        <span>ID: ${aluno.id} - ${aluno.nome} (${aluno.matricula})</span>
+                        <a href="alunos_detalhes.html?id=${aluno.id}" class="btn btn-sm btn-info">Ver Detalhes</a>
+                    `;
+                    lista.appendChild(li);
+                });
+            } catch (error) {
+                console.error("Erro ao listar alunos:", error);
+            }
         }
 
         async function cadastrarAluno() {
@@ -63,17 +81,33 @@
             const email = document.getElementById("emailAluno").value;
             const matricula = document.getElementById("matriculaAluno").value;
             const senha = document.getElementById("senhaAluno").value;
-            const id_turma = document.getElementById("selectTurmaAluno").value;
+            // const id_turma = document.getElementById("selectTurmaAluno").value;
+            const id_curso = document.getElementById("selectCursoAluno").value;
 
-            if (!nome || !email || !matricula || !senha || !id_turma) return;
+            if (!nome || !email || !matricula || !senha || !id_curso) {
+                alert("Preencha todos os campos!");
+                return;
+            }
 
-            await axios.post(`${API_URL}/cadastrarAluno`, { nome, email, matricula, senha, id_turma });
-            document.getElementById("formCadastrarAluno").reset();
-            listarAlunos();
+            try {
+                await axios.post(`${API_URL}/cadastrarAluno`, {
+                    nome,
+                    email,
+                    matricula,
+                    senha,
+                    id_curso
+                });
+
+                document.getElementById("formCadastrarAluno").reset();
+                listarAlunos();
+            } catch (error) {
+                console.error("Erro ao cadastrar aluno:", error);
+            }
         }
 
         document.addEventListener('DOMContentLoaded', async () => {
-            await popularTurmasSelects();
+            // await popularTurmasSelects();
+            await popularCursosSelects();
             await listarAlunos();
         });
     </script>

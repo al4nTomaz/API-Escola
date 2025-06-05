@@ -1,6 +1,6 @@
 import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../instances/mysql';
-import { Turma } from './Turma';
+import { Curso } from './Curso';
 
 export class Aluno extends Model {
     public id!: number;
@@ -8,7 +8,7 @@ export class Aluno extends Model {
     public email!: string;
     public senha!: string;
     public matricula!: string;
-    public id_turma!: number;
+    public id_curso!: number | 0;
 }
 
 Aluno.init(
@@ -36,11 +36,11 @@ Aluno.init(
             allowNull: false,
             unique: true
         },
-        id_turma: {
+        id_curso: {
             type: DataTypes.INTEGER,
-            field: 'id_turma',
+            field: 'id_curso',
             references: {
-                model: Turma,
+                model: Curso,
                 key: "id",
             },
             onDelete: "CASCADE",

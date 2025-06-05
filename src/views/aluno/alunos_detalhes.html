@@ -1,191 +1,324 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Detalhes do Aluno</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-</head>
-<body class="bg-light">
+  </head>
+  <body class="bg-light">
     <div class="container mt-4">
-        <h2 class="text-center mb-4">Detalhes do Aluno</h2>
-        <a href="alunos_listar_cadastro.html" class="btn btn-secondary mb-3">Voltar para Alunos</a>
+      <h2 class="text-center mb-4">Detalhes do Aluno</h2>
+      <a href="alunos_listar_cadastro.html" class="btn btn-secondary mb-3"
+        >Voltar para Alunos</a
+      >
 
-        <section class="card shadow-sm mb-4 p-3">
-            <h4 class="card-title">Dados do Aluno</h4>
-            <div id="dadosAluno" class="mb-3">
-                <p><strong>ID:</strong> <span id="alunoIdDisplay"></span></p>
-                <p><strong>Nome:</strong> <span id="alunoNomeDisplay"></span></p>
-                <p><strong>E-mail:</strong> <span id="alunoEmailDisplay"></span></p>
-                <p><strong>Matrícula:</strong> <span id="alunoMatriculaDisplay"></span></p>
-                <p><strong>Turma:</strong> <span id="alunoTurmaDisplay"></span></p>
-            </div>
+      <section class="card shadow-sm mb-4 p-3">
+        <h4 class="card-title">Dados do Aluno</h4>
+        <div id="dadosAluno" class="mb-3">
+          <p><strong>ID:</strong> <span id="alunoIdDisplay"></span></p>
+          <p><strong>Nome:</strong> <span id="alunoNomeDisplay"></span></p>
+          <p><strong>E-mail:</strong> <span id="alunoEmailDisplay"></span></p>
+          <p>
+            <strong>Matrícula:</strong> <span id="alunoMatriculaDisplay"></span>
+          </p>
+          <p><strong>Curso:</strong> <span id="alunoCursoDisplay"></span></p>
+          <p><strong>Turma:</strong> <span id="alunoTurmaDisplay"></span></p>
+        </div>
 
-            <h5 class="mt-3">Atualizar Aluno</h5>
-            <form id="formAtualizarAluno" onsubmit="event.preventDefault(); atualizarAluno()">
-                <input type="hidden" id="alunoIdAtualizar">
-                <input type="text" id="nomeAlunoAtualizar" class="form-control mb-2" placeholder="Nome" required>
-                <input type="email" id="emailAlunoAtualizar" class="form-control mb-2" placeholder="E-mail" required>
-                <input type="text" id="matriculaAlunoAtualizar" class="form-control mb-2" placeholder="Matrícula" required>
-                <input type="password" id="senhaAlunoAtualizar" class="form-control mb-2" placeholder="Nova Senha (opcional)">
-                <select id="selectTurmaAlunoAtualizar" class="form-select mb-2" required></select>
-                <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-                    <button class="btn btn-secondary me-md-2" type="submit">Atualizar Dados</button>
-                    <button class="btn btn-danger" type="button" onclick="deletarAluno()">Deletar Aluno</button>
-                </div>
-            </form>
-        </section>
+        <h5 class="mt-3">Atualizar Aluno</h5>
+        <form
+          id="formAtualizarAluno"
+          onsubmit="event.preventDefault(); atualizarAluno()"
+        >
+          <input type="hidden" id="alunoIdAtualizar" />
+          <input
+            type="text"
+            id="nomeAlunoAtualizar"
+            class="form-control mb-2"
+            placeholder="Nome"
+            required
+          />
+          <input
+            type="email"
+            id="emailAlunoAtualizar"
+            class="form-control mb-2"
+            placeholder="E-mail"
+            required
+          />
+          <input
+            type="text"
+            id="matriculaAlunoAtualizar"
+            class="form-control mb-2"
+            placeholder="Matrícula"
+            required
+          />
+          <input
+            type="password"
+            id="senhaAlunoAtualizar"
+            class="form-control mb-2"
+            placeholder="Nova Senha (opcional)"
+          />
+          <select
+            id="selectTurmaAlunoAtualizar"
+            class="form-select mb-2"
+            required
+          ></select>
+          <select
+            id="selectCursoAlunoAtualizar"
+            class="form-select mb-2"
+            required
+          ></select>
+          <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+            <button class="btn btn-secondary me-md-2" type="submit">
+              Atualizar Dados
+            </button>
+            <button
+              class="btn btn-danger"
+              type="button"
+              onclick="deletarAluno()"
+            >
+              Deletar Aluno
+            </button>
+          </div>
+        </form>
+      </section>
 
-        <section class="card shadow-sm mb-4 p-3">
-            <h4 class="card-title">Notas e Médias</h4>
-            <button class="btn btn-info mb-3" onclick="listarNotasMediasAluno()">Listar Notas e Médias</button>
-            <ul id="listaNotasMediasAluno" class="list-group"></ul>
-        </section>
+      <section class="card shadow-sm mb-4 p-3">
+        <h4 class="card-title">Notas e Médias</h4>
+        <button class="btn btn-info mb-3" onclick="listarNotasMediasAluno()">
+          Listar Notas e Médias
+        </button>
+        <ul id="listaNotasMediasAluno" class="list-group"></ul>
+      </section>
 
-        <section class="card shadow-sm mb-4 p-3">
-            <h4 class="card-title">Percentual de Presença</h4>
-            <button class="btn btn-info mb-3" onclick="listarPercentualPresencaAluno()">Listar Percentual de Presença</button>
-            <ul id="listaPercentualPresencaAluno" class="list-group"></ul>
-        </section>
+      <section class="card shadow-sm mb-4 p-3">
+        <h4 class="card-title">Percentual de Presença</h4>
+        <button
+          class="btn btn-info mb-3"
+          onclick="listarPercentualPresencaAluno()"
+        >
+          Listar Percentual de Presença
+        </button>
+        <ul id="listaPercentualPresencaAluno" class="list-group"></ul>
+      </section>
 
-        <section class="card shadow-sm mb-4 p-3">
-            <h4 class="card-title">Situação por Disciplina</h4>
-            <button class="btn btn-info mb-3" onclick="listarSituacaoAluno()">Verificar Situação</button>
-            <ul id="listaSituacaoAluno" class="list-group"></ul>
-        </section>
-
+      <section class="card shadow-sm mb-4 p-3">
+        <h4 class="card-title">Situação por Disciplina</h4>
+        <button class="btn btn-info mb-3" onclick="listarSituacaoAluno()">
+          Verificar Situação
+        </button>
+        <ul id="listaSituacaoAluno" class="list-group"></ul>
+      </section>
     </div>
 
     <script>
-        const API_URL = "http://localhost:3000";
-        let alunoId = null;
+      const API_URL = "http://localhost:3000";
+      let alunoId = null;
 
-        async function popularTurmasSelectsAtualizar() {
-            const res = await axios.get(`${API_URL}/listarTurmas`);
-            const select = document.getElementById("selectTurmaAlunoAtualizar");
-            select.innerHTML = '<option value="">Selecione uma turma</option>';
-            res.data.forEach(turma => {
-                select.innerHTML += `<option value="${turma.id}">${turma.nome} (${turma.periodo})</option>`;
-            });
-        }
-
-        async function carregarAluno() {
-            const params = new URLSearchParams(window.location.search);
-            alunoId = params.get('id');
-
-            if (!alunoId) {
-                window.location.href = 'alunos_listar_cadastro.html'; // Redireciona se não houver ID
-                return;
-            }
-
-            const res = await axios.get(`${API_URL}/buscarAluno/${alunoId}`);
-            if (res.data) {
-                document.getElementById("alunoIdDisplay").innerText = res.data.id;
-                document.getElementById("alunoNomeDisplay").innerText = res.data.nome;
-                document.getElementById("alunoEmailDisplay").innerText = res.data.email;
-                document.getElementById("alunoMatriculaDisplay").innerText = res.data.matricula;
-                
-                // Fetch turma name (assuming your API has a /turmas/:id endpoint)
-                if (res.data.id_turma) {
-                    const turmaRes = await axios.get(`${API_URL}/listarTrumas/${res.data.id_turma}`);
-                    document.getElementById("alunoTurmaDisplay").innerText = turmaRes.data ? turmaRes.data.nome : 'N/A';
-                } else {
-                    document.getElementById("alunoTurmaDisplay").innerText = 'N/A';
-                }
-
-
-                document.getElementById("alunoIdAtualizar").value = res.data.id;
-                document.getElementById("nomeAlunoAtualizar").value = res.data.nome;
-                document.getElementById("emailAlunoAtualizar").value = res.data.email;
-                document.getElementById("matriculaAlunoAtualizar").value = res.data.matricula;
-                document.getElementById("selectTurmaAlunoAtualizar").value = res.data.id_turma;
-            } else {
-                window.location.href = 'alunos_listar_cadastro.html'; // Redireciona se aluno não encontrado
-            }
-        }
-
-        async function atualizarAluno() {
-            const id = document.getElementById("alunoIdAtualizar").value;
-            const nome = document.getElementById("nomeAlunoAtualizar").value;
-            const email = document.getElementById("emailAlunoAtualizar").value;
-            const matricula = document.getElementById("matriculaAlunoAtualizar").value;
-            const senha = document.getElementById("senhaAlunoAtualizar").value;
-            const id_turma = document.getElementById("selectTurmaAlunoAtualizar").value;
-
-            const data = { nome, email, matricula, id_turma };
-            if (senha) data.senha = senha;
-
-            await axios.put(`${API_URL}/atualizarAluno/${id}`, data);
-            await carregarAluno(); // Recarrega os dados para mostrar a atualização
-        }
-
-        async function deletarAluno() {
-            if (!confirm("Tem certeza que deseja deletar este aluno?")) return;
-            await axios.delete(`${API_URL}/deletarAluno/${alunoId}`);
-            window.location.href = 'alunos_listar_cadastro.html'; // Redireciona após deletar
-        }
-
-        async function listarNotasMediasAluno() {
-            const lista = document.getElementById("listaNotasMediasAluno");
-            lista.innerHTML = "";
-            const res = await axios.get(`${API_URL}/alunos/${alunoId}/notas`);
-            if (res.data && res.data.length > 0) {
-                res.data.forEach(item => {
-                    lista.innerHTML += `<li class="list-group-item">
-                        <strong>Disciplina:</strong> ${item.disciplinaNome} <br>
-                        <strong>Notas:</strong> ${item.notas.map(n => n.nota).join(', ')} <br>
-                        <strong>Média:</strong> ${item.media.toFixed(2)}
-                    </li>`;
-                });
-            } else {
-                lista.innerHTML = "<li class='list-group-item'>Nenhuma nota encontrada para este aluno.</li>";
-            }
-        }
-
-        async function listarPercentualPresencaAluno() {
-            const lista = document.getElementById("listaPercentualPresencaAluno");
-            lista.innerHTML = "";
-            const res = await axios.get(`${API_URL}/alunos/${alunoId}/presencas`);
-            if (res.data && Object.keys(res.data).length > 0) {
-                for (const disciplinaNome in res.data) {
-                    lista.innerHTML += `<li class="list-group-item">
-                        <strong>Disciplina:</strong> ${disciplinaNome} <br>
-                        <strong>Percentual de Presença:</strong> ${res.data[disciplinaNome].toFixed(2)}%
-                    </li>`;
-                }
-            } else {
-                lista.innerHTML = "<li class='list-group-item'>Nenhum registro de presença para este aluno.</li>";
-            }
-        }
-
-        async function listarSituacaoAluno() {
-            const lista = document.getElementById("listaSituacaoAluno");
-            lista.innerHTML = "";
-            const res = await axios.get(`${API_URL}/alunos/${alunoId}/situacao`);
-            if (res.data && Object.keys(res.data).length > 0) {
-                for (const disciplinaNome in res.data) {
-                    const situacao = res.data[disciplinaNome];
-                    let statusColor = 'text-success';
-                    if (situacao.status === 'Reprovado por Nota' || situacao.status === 'Reprovado por Presença') {
-                        statusColor = 'text-danger';
-                    }
-                    lista.innerHTML += `<li class="list-group-item">
-                        <strong>Disciplina:</strong> ${disciplinaNome} <br>
-                        <strong>Status:</strong> <span class="${statusColor}">${situacao.status}</span> <br>
-                        ${situacao.media !== undefined ? `<strong>Média:</strong> ${situacao.media.toFixed(2)} <br>` : ''}
-                        ${situacao.percentualPresenca !== undefined ? `<strong>Presença:</strong> ${situacao.percentualPresenca.toFixed(2)}%` : ''}
-                    </li>`;
-                }
-            } else {
-                lista.innerHTML = "<li class='list-group-item'>Nenhuma situação encontrada para este aluno.</li>";
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', async () => {
-            await popularTurmasSelectsAtualizar();
-            await carregarAluno();
+      async function popularTurmasSelectsAtualizar() {
+        const res = await axios.get(`${API_URL}/listarTurmas`);
+        const select = document.getElementById("selectTurmaAlunoAtualizar");
+        select.innerHTML = '<option value="">Selecione uma turma</option>';
+        res.data.forEach((turma) => {
+          select.innerHTML += `<option value="${turma.id}">${turma.nome} (${turma.periodo})</option>`;
         });
+      }
+
+      async function popularCursosSelectsAtualizar() {
+        const res = await axios.get(`${API_URL}/listarCursos`);
+        const select = document.getElementById("selectCursoAlunoAtualizar");
+        select.innerHTML = '<option value="">Selecione um curso</option>';
+        res.data.forEach((curso) => {
+          select.innerHTML += `<option value="${curso.id}">${curso.nome}</option>`;
+        });
+      }
+
+      async function carregarAluno() {
+        const params = new URLSearchParams(window.location.search);
+        alunoId = params.get("id");
+
+        if (!alunoId) {
+          window.location.href = "alunos_listar_cadastro.html"; // Redireciona se não houver ID
+          return;
+        }
+
+        const res = await axios.get(`${API_URL}/buscarAluno/${alunoId}`);
+        if (res.data) {
+          document.getElementById("alunoIdDisplay").innerText = res.data.id;
+          document.getElementById("alunoNomeDisplay").innerText = res.data.nome;
+          document.getElementById("alunoEmailDisplay").innerText =
+            res.data.email;
+          document.getElementById("alunoMatriculaDisplay").innerText =
+            res.data.matricula;
+
+          // Carregar turma(s) do aluno
+          const turmaRes = await axios.get(
+            `${API_URL}/listarTurmasDoAluno/${res.data.id}`
+          );
+          if (
+            turmaRes.data &&
+            Array.isArray(turmaRes.data.turmas) &&
+            turmaRes.data.turmas.length > 0
+          ) {
+            const nomesTurmas = turmaRes.data.turmas.map(
+              (t) => `${t.nome} (${t.periodo})`
+            );
+            document.getElementById("alunoTurmaDisplay").innerText =
+              nomesTurmas.join(", ");
+          } else {
+            document.getElementById("alunoTurmaDisplay").innerText =
+              "Nenhuma turma vinculada";
+          }
+
+          // Carregar curso do aluno
+          const cursoRes = await axios.get(
+            `${API_URL}/buscarCurso/${res.data.id_curso}`
+          );
+          if (cursoRes.data) {
+            // Supondo que o curso seja um objeto, não um array
+            const curso = cursoRes.data;
+            document.getElementById(
+              "alunoCursoDisplay"
+            ).innerText = `${curso.nome}`;
+          } else {
+            document.getElementById("alunoCursoDisplay").innerText =
+              "Nenhum curso vinculado";
+          }
+
+          // Preencher formulário de atualização
+          document.getElementById("alunoIdAtualizar").value = res.data.id;
+          document.getElementById("nomeAlunoAtualizar").value = res.data.nome;
+          document.getElementById("emailAlunoAtualizar").value = res.data.email;
+          document.getElementById("matriculaAlunoAtualizar").value =
+            res.data.matricula;
+          document.getElementById("selectTurmaAlunoAtualizar").value =
+            turmaRes.data.turmas.length > 0 ? turmaRes.data.turmas[0].id : "";
+          document.getElementById("selectCursoAlunoAtualizar").value =
+            res.data.id_curso || "";
+        } else {
+          window.location.href = "alunos_listar_cadastro.html"; // Redireciona se aluno não encontrado
+        }
+      }
+
+      async function atualizarAluno() {
+        const id_aluno = document.getElementById("alunoIdAtualizar").value;
+        const nome = document.getElementById("nomeAlunoAtualizar").value;
+        const email = document.getElementById("emailAlunoAtualizar").value;
+        const matricula = document.getElementById(
+          "matriculaAlunoAtualizar"
+        ).value;
+        const senha = document.getElementById("senhaAlunoAtualizar").value;
+        const id_turma = document.getElementById(
+          "selectTurmaAlunoAtualizar"
+        ).value;
+        const id_curso = document.getElementById(
+          "selectCursoAlunoAtualizar"
+        ).value;
+
+        const data = { nome, email, matricula, id_curso };
+        if (senha) data.senha = senha;
+
+        await axios.put(`${API_URL}/vincularTurmaDoAluno/${alunoId}/${id_turma}`);
+        await axios.put(`${API_URL}/atualizarAluno/${alunoId}`, data);
+        await carregarAluno(); // Recarrega os dados para mostrar a atualização
+      }
+
+      async function deletarAluno() {
+        if (!confirm("Tem certeza que deseja deletar este aluno?")) return;
+        await axios.delete(`${API_URL}/deletarAluno/${alunoId}`);
+        window.location.href = "alunos_listar_cadastro.html"; // Redireciona após deletar
+      }
+
+      async function listarNotasMediasAluno() {
+        const lista = document.getElementById("listaNotasMediasAluno");
+        lista.innerHTML = "";
+        const res = await axios.get(`${API_URL}/alunos/${alunoId}/notas`);
+        if (res.data && res.data.length > 0) {
+          res.data.forEach((item) => {
+            lista.innerHTML += `<li class="list-group-item">
+                  <strong>Disciplina:</strong> ${item.disciplinaNome} <br>
+                  <strong>Notas:</strong> ${item.notas
+                    .map((n) => n.nota)
+                    .join(", ")} <br>
+                  <strong>Média:</strong> ${item.media.toFixed(2)}
+              </li>`;
+          });
+        } else {
+          lista.innerHTML =
+            "<li class='list-group-item'>Nenhuma nota encontrada para este aluno.</li>";
+        }
+      }
+
+      async function listarPercentualPresencaAluno() {
+        const lista = document.getElementById("listaPercentualPresencaAluno");
+        lista.innerHTML = "";
+        const res = await axios.get(`${API_URL}/alunos/${alunoId}/presencas`);
+        if (res.data && Object.keys(res.data).length > 0) {
+          for (const disciplinaNome in res.data) {
+            lista.innerHTML += `<li class="list-group-item">
+                  <strong>Disciplina:</strong> ${disciplinaNome} <br>
+                  <strong>Percentual de Presença:</strong> ${res.data[
+                    disciplinaNome
+                  ].toFixed(2)}%
+              </li>`;
+          }
+        } else {
+          lista.innerHTML =
+            "<li class='list-group-item'>Nenhum registro de presença para este aluno.</li>";
+        }
+      }
+
+      async function listarSituacaoAluno() {
+        const lista = document.getElementById("listaSituacaoAluno");
+        lista.innerHTML = "";
+        const res = await axios.get(`${API_URL}/alunos/${alunoId}/situacao`);
+        if (res.data && Object.keys(res.data).length > 0) {
+          for (const disciplinaNome in res.data) {
+            const situacao = res.data[disciplinaNome];
+            let statusColor = "text-success";
+            if (
+              situacao.status === "Reprovado por Nota" ||
+              situacao.status === "Reprovado por Presença"
+            ) {
+              statusColor = "text-danger";
+            }
+            lista.innerHTML += `<li class="list-group-item">
+                  <strong>Disciplina:</strong> ${disciplinaNome} <br>
+                  <strong>Status:</strong> <span class="${statusColor}">${
+              situacao.status
+            }</span> <br>
+                  ${
+                    situacao.media !== undefined
+                      ? `<strong>Média:</strong> ${situacao.media.toFixed(
+                          2
+                        )} <br>`
+                      : ""
+                  }
+                  ${
+                    situacao.percentualPresenca !== undefined
+                      ? `<strong>Presença:</strong> ${situacao.percentualPresenca.toFixed(
+                          2
+                        )}%`
+                      : ""
+                  }
+              </li>`;
+          }
+        } else {
+          lista.innerHTML =
+            "<li class='list-group-item'>Nenhuma situação encontrada para este aluno.</li>";
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", async () => {
+        await popularTurmasSelectsAtualizar();
+        await popularCursosSelectsAtualizar();
+        await carregarAluno();
+      });
     </script>
-</body>
+  </body>
 </html>
