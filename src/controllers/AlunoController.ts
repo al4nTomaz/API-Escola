@@ -180,18 +180,24 @@ export const listarNotasComMedia = async (req: Request, res: Response): Promise<
 
 
 export const percentualPresenca = async (req: Request, res: Response): Promise<any> => {
-    const { id: alunoId } = req.params;
+    const { alunoId } = req.params;
 
     try {
-        // Check if aluno exists first (optional, but good for consistent 404)
+        // Verifica se o aluno existe
         const aluno = await Aluno.findByPk(alunoId);
         if (!aluno) {
             return res.status(404).json({ error: 'Aluno não encontrado.' });
         }
 
+        // Busca as presenças com a disciplina associada
         const presencas = await Presenca.findAll({
-            where: { alunoId: Number(alunoId) },
-            include: [Disciplina],
+            where: { aluno_id: Number(alunoId) }, // Certifique-se de usar o nome da coluna no DB
+            include: [
+                {
+                    model: Disciplina,
+                    as: 'disciplinas', // Usar o alias definido na associação
+                }
+            ],
         });
 
         const resultado: { disciplina: string; percentual: string }[] = [];
@@ -199,10 +205,14 @@ export const percentualPresenca = async (req: Request, res: Response): Promise<a
 
         presencas.forEach((presenca) => {
             const disciplinaId = presenca.disciplina_id;
-            const nomeDisciplina = presenca.disciplina?.nome || 'Desconhecida';
+            const nomeDisciplina = (presenca as any).disciplinas?.nome || 'Desconhecida';
 
             if (!disciplinasMap.has(disciplinaId)) {
-                disciplinasMap.set(disciplinaId, { disciplina: nomeDisciplina, total: 0, presentes: 0 });
+                disciplinasMap.set(disciplinaId, {
+                    disciplina: nomeDisciplina,
+                    total: 0,
+                    presentes: 0
+                });
             }
 
             const data = disciplinasMap.get(disciplinaId)!;
@@ -211,7 +221,7 @@ export const percentualPresenca = async (req: Request, res: Response): Promise<a
         });
 
         disciplinasMap.forEach((value) => {
-            let percentual = '0.0%'; // Default to 0% if no classes
+            let percentual = '0.0%';
             if (value.total > 0) {
                 percentual = ((value.presentes / value.total) * 100).toFixed(1) + '%';
             }
@@ -225,19 +235,27 @@ export const percentualPresenca = async (req: Request, res: Response): Promise<a
     }
 };
 
-export const situacaoAluno = async (req: Request, res: Response) : Promise<any> => {
-  const { id: alunoId } = req.params;
+
+export const situacaoAluno = async (req: Request, res: Response): Promise<any> => {
+  const { alunoId } = req.params;
 
   try {
     const aluno = await Aluno.findByPk(alunoId);
     if (!aluno) return res.status(404).json({ mensagem: 'Aluno não encontrado.' });
 
     const notas = await Nota.findAll({
-      where: { alunoId: Number(alunoId) },
-      include: [Disciplina],
+      where: { aluno_id: Number(alunoId) }, // Corrigido: nome da coluna
+      include: [
+        {
+          model: Disciplina,
+          as: 'disciplinas', // Corrigido: uso do alias
+        }
+      ],
     });
 
-    const presencas = await Presenca.findAll({ where: { alunoId: Number(alunoId) } });
+    const presencas = await Presenca.findAll({
+      where: { aluno_id: Number(alunoId) }, // Corrigido: nome da coluna
+    });
 
     const resultado: {
       disciplina: string;
@@ -270,8 +288,9 @@ export const situacaoAluno = async (req: Request, res: Response) : Promise<any> 
         ? (presencaData.presentes / presencaData.total) * 100
         : 0;
 
+      const nome = (notas.find(n => n.disciplina_id === disciplinaId) as any)?.disciplinas?.nome || 'Desconhecida';
+
       const status = media >= 7 && presenca >= 75 ? 'Aprovado' : 'Reprovado';
-      const nome = notas.find(n => n.disciplina_id === disciplinaId)?.disciplina?.nome || 'Desconhecida';
 
       resultado.push({
         disciplina: nome,
@@ -279,11 +298,13 @@ export const situacaoAluno = async (req: Request, res: Response) : Promise<any> 
         presenca: Number(presenca.toFixed(1)),
         status
       });
-    });  
-    return res.status(200).json(resultado);
+    });
 
+    return res.status(200).json(resultado);
   } catch (error) {
+    console.error('Erro ao verificar situação do aluno:', error);
     return res.status(500).json({ error: 'Erro ao verificar situação.' });
   }
 };
+
 

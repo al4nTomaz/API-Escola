@@ -9,25 +9,10 @@ describe('Testes dos controladores de alunos', () => {
   beforeAll(async () => {
     // Login para obter token válido para professor
     const loginResponse = await request(app)
-      .post('/login')
-      .send({ identificador: 'PRF001', senha: 'senha123' });
-
+    .post('/login')
+    .send({ identificador: 'PRF001', senha: 'senha123' });
+    
     tokenProfessor = loginResponse.body.token;
-
-    // Opcional: criar um aluno para os testes que precisam de alunoId
-    // const alunoResponse = await request(app)
-    //   .post('/alunos')
-    //   .set('Authorization', `Bearer ${tokenProfessor}`)
-    //   .send({
-    //     nome: 'João Silva',
-    //     email: 'joao@example.com',
-    //     senha: 'senha123',
-    //     matricula: '20230001',
-    //     curso_id: 1,
-    //     tipo: 'aluno',
-    //   });
-
-    // alunoId = alunoResponse.body.id;
   });
 
   it('Deve listar todos os alunos', async () => {
@@ -60,7 +45,7 @@ describe('Testes dos controladores de alunos', () => {
       .get(`/alunos/${alunoId}`);
 
     expect(response.status).toBe(200);
-    expect(response.body.id).toBe(3);
+    expect(response.body.id).toBe(alunoId);
   });
 
   it('Deve atualizar os dados de um aluno', async () => {
@@ -70,32 +55,6 @@ describe('Testes dos controladores de alunos', () => {
     expect(response.status).toBe(200);
     expect(response.body.nome).toBe('João Silva Atualizado');
   });
-
-  it('Deve deletar um aluno', async () => {
-    const response = await request(app)
-      .delete(`/alunos/${alunoId}`)
-      .set('Authorization', `Bearer ${tokenProfessor}`);
-
-    expect(response.status).toBe(204);
-  });
-
-  // it('Deve listar alunos deletados', async () => {
-  //   const response = await request(app)
-  //     .get('/alunos-deletados')
-  //     .set('Authorization', `Bearer ${tokenProfessor}`);
-
-  //   expect(response.status).toBe(200);
-  //   expect(Array.isArray(response.body)).toBe(true);
-  // });
-
-  // it('Deve recuperar um aluno deletado', async () => {
-  //   const response = await request(app)
-  //     .post(`/alunos/${3}/recuperar`)
-  //     .set('Authorization', `Bearer ${tokenProfessor}`);
-
-  //   expect(response.status).toBe(200);
-  //   expect(response.body.mensagem).toBe('Aluno recuperado com sucesso.');
-  // });
 
   it('Deve listar notas com média de um aluno', async () => {
     const response = await request(app)
@@ -142,4 +101,32 @@ describe('Testes dos controladores de alunos', () => {
       expect(response.body[0]).toHaveProperty('status');
     }
   });
+
+  it('Deve deletar um aluno', async () => {
+    const response = await request(app)
+      .delete(`/alunos/${alunoId}`)
+      .set('Authorization', `Bearer ${tokenProfessor}`);
+
+    expect(response.status).toBe(204);
+  });
+
+  // it('Deve listar alunos deletados', async () => {
+  //   const response = await request(app)
+  //     .get('/alunos-deletados')
+  //     .set('Authorization', `Bearer ${tokenProfessor}`);
+
+  //   expect(response.status).toBe(200);
+  //   expect(Array.isArray(response.body)).toBe(true);
+  // });
+
+  // it('Deve recuperar um aluno deletado', async () => {
+  //   const response = await request(app)
+  //     .post(`/alunos/${3}/recuperar`)
+  //     .set('Authorization', `Bearer ${tokenProfessor}`);
+
+  //   expect(response.status).toBe(200);
+  //   expect(response.body.mensagem).toBe('Aluno recuperado com sucesso.');
+  // });
+
+  
 });
