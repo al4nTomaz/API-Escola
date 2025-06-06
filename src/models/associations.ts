@@ -11,116 +11,116 @@ import { AlunoTurma } from './AlunoTurma';
 // Relação N:N entre Aluno e Disciplina
 Aluno.belongsToMany(Disciplina, {
     through: AlunoDisciplina,
-    foreignKey: 'id_aluno',
+    foreignKey: 'aluno_id',
     as: 'disciplinas'
 });
 
 Disciplina.belongsToMany(Aluno, {
     through: AlunoDisciplina,
-    foreignKey: 'id_disciplina',
+    foreignKey: 'disciplina_id',
     as: 'alunos'
 });
 
 Curso.hasMany(Aluno, {
-  foreignKey: 'id_curso',
+  foreignKey: 'curso_id',
   as: 'alunos'
 });
 
 // Um Aluno pertence a um Curso
 Aluno.belongsTo(Curso, {
-  foreignKey: 'id_curso',
-  as: 'curso'
+  foreignKey: 'curso_id',
+  as: 'cursos'
 });
 
 Aluno.belongsToMany(Turma, {
   through: AlunoTurma,
-  foreignKey: 'id_aluno',     // chave que representa o Aluno na tabela de junção
-  otherKey: 'id_turma',       // chave que representa a Turma
+  foreignKey: 'aluno_id',     // chave que representa o Aluno na tabela de junção
+  otherKey: 'turma_id',       // chave que representa a Turma
   as: 'turmas'
 });
 
 Turma.belongsToMany(Aluno, {
   through: AlunoTurma,
-  foreignKey: 'id_turma',     // chave que representa a Turma na tabela de junção
-  otherKey: 'id_aluno',       // chave que representa o Aluno
+  foreignKey: 'turma_id',     // chave que representa a Turma na tabela de junção
+  otherKey: 'aluno_id',       // chave que representa o Aluno
   as: 'alunos'
 });
 
 
 // Relação 1:N entre Turma e Aluno
 // Turma.hasMany(Aluno, {
-//     foreignKey: 'id_turma',
+//     foreignKey: 'turma_id',
 //     as: 'alunosDaTurma'
 // });
 
 // Aluno.belongsTo(Turma, {
-//     foreignKey: 'id_turma',
+//     foreignKey: 'turma_id',
 //     as: 'turma'
 // });
 
 // Relação 1:N entre Curso e Turma
 Curso.hasMany(Turma, {
-    foreignKey: 'id_curso',
+    foreignKey: 'curso_id',
     as: 'turmas'
 });
 
 Turma.belongsTo(Curso, {
-    foreignKey: 'id_curso',
-    as: 'curso'
+    foreignKey: 'curso_id',
+    as: 'cursos'
 });
 
 // Relação 1:N entre Professor e Disciplina
 Professor.hasMany(Disciplina, {
-    foreignKey: 'id_professor',
-    as: 'disciplinasLecionadas'
+    foreignKey: 'professor_id',
+    as: 'disciplinas'
 });
 
 Disciplina.belongsTo(Professor, {
-    foreignKey: 'id_professor',
-    as: 'professor'
+    foreignKey: 'professor_id',
+    as: 'professores'
 });
 
 // Relação 1:N entre Aluno e Presenca
 Aluno.hasMany(Presenca, {
-    foreignKey: 'id_aluno',
+    foreignKey: 'aluno_id',
     as: 'presencas'
 });
 
 Presenca.belongsTo(Aluno, {
-    foreignKey: 'id_aluno',
-    as: 'aluno'
+    foreignKey: 'aluno_id',
+    as: 'alunos'
 });
 
 // Relação 1:N entre Disciplina e Presenca
 Disciplina.hasMany(Presenca, {
-    foreignKey: 'id_disciplina',
-    as: 'presencasDaDisciplina'
+    foreignKey: 'disciplina_id',
+    as: 'presencas'
 });
 
 Presenca.belongsTo(Disciplina, {
-    foreignKey: 'id_disciplina',
-    as: 'disciplina'
+    foreignKey: 'disciplina_id',
+    as: 'disciplinas'
 });
 
 // Relação 1:N entre Aluno e Nota
 Aluno.hasMany(Nota, {
-    foreignKey: 'id_aluno',
+    foreignKey: 'aluno_id',
     as: 'notas'
 });
 
 Nota.belongsTo(Aluno, {
-    foreignKey: 'id_aluno',
-    as: 'aluno'
+    foreignKey: 'aluno_id',
+    as: 'alunos'
 });
 
 // Relação 1:N entre Disciplina e Nota
 Disciplina.hasMany(Nota, {
-    foreignKey: 'id_disciplina',
-    as: 'notasDaDisciplina'
+    foreignKey: 'disciplina_id',
+    as: 'notas'
 });
 
 Nota.belongsTo(Disciplina, {
-    foreignKey: 'id_disciplina',
-    as: 'disciplina'
+    foreignKey: 'disciplina_id',
+    as: 'disciplinas'
 });
 

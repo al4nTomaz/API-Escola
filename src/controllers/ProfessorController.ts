@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
 import { Professor } from "../models/Professor";
 import { Op } from "sequelize";
+import bcrypt from 'bcrypt';
 import { Disciplina } from "../models/Disciplina";
 import jwt from "jsonwebtoken";
 
-const JWT_SECRET = process.env.JWT_SECRET || "senha-super-secreta";
+const JWT_SECRET = process.env.JWT_SECRET || "senha";
 
 export const listarProfessores = async (req: Request, res: Response): Promise<any> => {
   const professor = await Professor.findAll();
@@ -13,13 +14,14 @@ export const listarProfessores = async (req: Request, res: Response): Promise<an
 
 export const cadastrarProfessor = async (req: Request, res: Response): Promise<any> => {
   const { nome, email, matricula, senha } = req.body;
-
+  const hashedPassword = await bcrypt.hash(senha, 10);
   try {
     const novoProfessor = await Professor.create({
       nome,
       email,
       matricula,
-      senha,
+      senha: hashedPassword,
+      tipo: "professor"
     });
     res.status(201).json({
       message: "Professor cadastrado com sucesso",

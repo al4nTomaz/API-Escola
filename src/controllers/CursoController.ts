@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
 import { Op } from 'sequelize';
 import { Curso } from '../models/Curso';
-import { Disciplina } from '../models/Disciplina';
+import { Turma } from '../models/Turma';
+import { Aluno } from '../models/Aluno';
 
 export const listarCursos = async (req: Request, res: Response)  : Promise<any>  =>{
     const cursos = await Curso.findAll();
@@ -72,9 +73,10 @@ export const deletarCurso = async (req: Request, res: Response)  : Promise<any> 
             return res.status(404).json({ error: 'Curso não encontrado.' });
         }
 
-        const disciplinaCurso = await Disciplina.findOne({ where: { cursoId: cursoId } });
-        if (disciplinaCurso) {
-            return res.status(400).json({ error: 'Curso não pode ser excluído, há disciplinas matriculados neste curso.' });
+        const turmaCurso = await Turma.findOne({ where: { curso_id: cursoId } });
+        const alunoCurso = await Aluno.findOne({ where: { curso_id: cursoId } });
+        if (turmaCurso || alunoCurso) {
+            return res.status(400).json({ error: 'Curso não pode ser excluído, há pendencias neste curso.' });
         }
 
         await curso.destroy();

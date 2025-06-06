@@ -5,7 +5,7 @@ import { Professor } from './Professor';
 export class Disciplina extends Model {
     public id!: number;
     public nome!: string;
-    public id_professor!: number;
+    public professor_id!: number;
 }
 
 Disciplina.init(
@@ -19,9 +19,9 @@ Disciplina.init(
             type: DataTypes.STRING,
             allowNull: false,   
         },
-        id_professor: {
+        professor_id: {
             type: DataTypes.INTEGER,
-            field: 'id_professor',
+            field: 'professor_id',
             references: {
                 model: Professor,
                 key: "id",

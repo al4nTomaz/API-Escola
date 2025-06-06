@@ -3,40 +3,42 @@ import dotenv from 'dotenv';
 import express, { ErrorRequestHandler, Request, Response } from 'express';
 import path from 'path';
 import { conectarBanco } from './instances/mysql';
-import "./models/associations";
+import './models/associations';
 import apiRoutes from './routes/routes';
 
 dotenv.config();
 
-const server = express();
+const app = express();
 
-server.use(cors());
+// Conectar banco de dados
 conectarBanco();
 
-server.use(express.static(path.join(__dirname, '../public')));
+// Middlewares
+app.use(cors());
+app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.json());
 
-// Definir o formato das requisições
-server.use(express.json()); // Usando JSON
+// Rotas
+app.use(apiRoutes);
 
-// Definir as rotas da API
-server.use(apiRoutes);
-
-// Endpoint para caso o usuário acesse um caminho inexistente
-server.use((req: Request, res: Response) => {
-    res.status(404).json({ error: 'Endpoint no encontrado.' });
+// Rota 404
+app.use((req: Request, res: Response) => {
+  res.status(404).json({ error: 'Endpoint não encontrado.' });
 });
 
 // Middleware de erro
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
-    console.error(err); // Exibe o erro no console
-    res.status(400).json({ error: 'Ocorreu algum erro.' });
+  console.error(err);
+  res.status(500).json({ error: 'Ocorreu um erro no servidor.' });
 };
-server.use(errorHandler);
+app.use(errorHandler);
 
-// Iniciar o servidor e exibir a porta no console
-const port = process.env.PORT || 3000; // Defina uma porta padrão se não estiver no .env
-server.listen(port, () => {
+// Só inicia o servidor se este arquivo for executado diretamente
+if (require.main === module) {
+  const port = process.env.PORT || 3000;
+  app.listen(port, () => {
     console.log(`Servidor rodando na porta ${port}`);
-});
+  });
+}
 
-export default server;
+export default app;

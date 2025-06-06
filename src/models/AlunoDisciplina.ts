@@ -4,26 +4,26 @@ import { Disciplina } from './Disciplina';
 import { Aluno } from './Aluno';
 
 export class AlunoDisciplina extends Model {
-    public id_aluno!: number;
-    public id_disciplina!: number;
+    public aluno_id!: number;
+    public disciplina_id!: number;
 }
 
 AlunoDisciplina.init(
     {
-        id_aluno: {
+        aluno_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
-            field: 'id_aluno',
+            field: 'aluno_id',
             references: {
                 model: Aluno,
                 key: "id",
             },
             onDelete: "CASCADE",
         },
-        id_disciplina: {
+        disciplina_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
-            field: 'id_disciplina',
+            field: 'disciplina_id',
             references: {
                 model: Disciplina,
                 key: "id",
@@ -33,7 +33,7 @@ AlunoDisciplina.init(
     },
     {
         sequelize,
-        tableName: "aluno_disciplina",
+        tableName: "alunos_disciplinas",
         timestamps: false,
 
     }

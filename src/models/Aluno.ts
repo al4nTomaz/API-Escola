@@ -8,7 +8,8 @@ export class Aluno extends Model {
     public email!: string;
     public senha!: string;
     public matricula!: string;
-    public id_curso!: number | 0;
+    public curso_id!: number | 0;
+    public tipo!: string;
 }
 
 Aluno.init(
@@ -36,14 +37,18 @@ Aluno.init(
             allowNull: false,
             unique: true
         },
-        id_curso: {
+        curso_id: {
             type: DataTypes.INTEGER,
-            field: 'id_curso',
+            field: 'curso_id',
             references: {
                 model: Curso,
                 key: "id",
             },
             onDelete: "CASCADE",
+        },
+        tipo: {
+            type: DataTypes.STRING,
+            allowNull: false,
         },
     },
     {

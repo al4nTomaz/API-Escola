@@ -5,10 +5,11 @@ import { Disciplina } from './Disciplina';
 
 export class Presenca extends Model {
     public id!: number;
-    public id_aluno!: number;
-    public id_disciplina!: number;
+    public aluno_id!: number;
+    public disciplina_id!: number;
     public data!: Date;
     public presente!: number;
+    public disciplina?: Disciplina;
 }
 
 Presenca.init(
@@ -18,20 +19,20 @@ Presenca.init(
             primaryKey: true,
             autoIncrement: true,
         },
-        id_aluno: {
+        aluno_id: {
             type: DataTypes.STRING,
             allowNull: false,
-            field: 'id_aluno',
+            field: 'aluno_id',
             references: {
                 model: Aluno,
                 key: "id",
             },
             onDelete: "CASCADE",
         },
-        id_disciplina: {
+        disciplina_id: {
             type: DataTypes.STRING,
             allowNull: false,
-            field: 'id_disciplina',
+            field: 'disciplina_id',
             references: {
                 model: Disciplina,
                 key: "id",

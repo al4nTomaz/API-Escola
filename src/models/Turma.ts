@@ -6,7 +6,7 @@ export class Turma extends Model {
     public id!: number;
     public nome!: string;
     public periodo!: string;
-    public id_curso!: number;
+    public curso_id!: number;
 }
 
 Turma.init(
@@ -24,7 +24,7 @@ Turma.init(
             type: DataTypes.STRING,
             allowNull: false,
         },
-        id_curso: {
+        curso_id: {
             type: DataTypes.INTEGER,
             references: {
                 model: Curso,

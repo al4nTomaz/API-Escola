@@ -4,26 +4,26 @@ import { Turma } from './Turma';
 import { Aluno } from './Aluno';
 
 export class AlunoTurma extends Model {
-  public id_aluno!: number;
-  public id_turma!: number;
+  public aluno_id!: number;
+  public turma_id!: number;
 }
 
 AlunoTurma.init(
   {
-    id_aluno: {
+    aluno_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      field: 'id_aluno',
+      field: 'aluno_id',
       references: {
         model: Aluno,
         key: 'id',
       },
       onDelete: 'CASCADE',
     },
-    id_turma: {
+    turma_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      field: 'id_turma',
+      field: 'turma_id',
       references: {
         model: Turma,
         key: 'id',

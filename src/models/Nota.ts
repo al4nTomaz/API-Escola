@@ -5,10 +5,11 @@ import { Disciplina } from './Disciplina';
 
 export class Nota extends Model {
     public id!: number;
-    public id_aluno!: number;
-    public id_disciplina!: number;
+    public aluno_id!: number;
+    public disciplina_id!: number;
     public nota!: number;
-    public dataAvaliacao!: Date;
+    public data_avaliacao!: Date;
+    public disciplina?: Disciplina;
 }
 
 Nota.init(
@@ -18,19 +19,19 @@ Nota.init(
             primaryKey: true,
             autoIncrement: true,
         },
-        id_aluno: {
-            type: DataTypes.STRING,
+        aluno_id: {
+            type: DataTypes.INTEGER,
             allowNull: false,
-            field: 'id_aluno',
+            field: 'aluno_id',
             references: {
                 model: Aluno,
                 key: "id",
             },
             onDelete: "CASCADE",
         },
-        id_disciplina: {
+        disciplina_id: {
             type: DataTypes.INTEGER,
-            field: 'id_disciplina',
+            field: 'disciplina_id',
             allowNull: false,
             references: {
                 model: Disciplina,
@@ -42,14 +43,14 @@ Nota.init(
             type: DataTypes.STRING,
             allowNull: false,
         },
-        dataAvaliacao: {
+        data_avaliacao: {
             type: DataTypes.STRING,
             allowNull: false,   
         },
     },
     {
         sequelize,
-        tableName: "presencas",
+        tableName: "notas",
         timestamps: true,
         paranoid: true,
     }
